@@ -24,9 +24,9 @@ public class ServerFacade {
 	public ArrayList<Intersection> getIntersections(){
 		ArrayList<Intersection> allIntersections = new ArrayList<>();
 		
-		for (Area area : areas) 
+		for (Area area : areas) {
 			allIntersections.addAll(area.getIntersections());
-		
+		}
 		
 		return allIntersections;
 	}
