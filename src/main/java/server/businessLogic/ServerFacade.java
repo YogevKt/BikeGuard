@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import server.entities.Area;
 import server.entities.Intersection;
+import server.entities.Location;
 import server.entities.User;
 
 public class ServerFacade {
@@ -20,7 +21,18 @@ public class ServerFacade {
 			serverFacade = new ServerFacade();
 		return serverFacade;
 	}
+
 	
+	
+	/***
+	 * Returns Collection with all the intersection from each area.
+	 * 
+	 * @param None
+	 *  
+	 * @return Array<Intersection>
+	 * 
+	 * @exception None
+	 */
 	public ArrayList<Intersection> getIntersections(){
 		ArrayList<Intersection> allIntersections = new ArrayList<>();
 		
@@ -30,23 +42,34 @@ public class ServerFacade {
 		return allIntersections;
 	}
 
+	/***
+	 * Get all areas
+	 * 
+	 * @param None
+	 *  
+	 * @return ArrayList<Intersection>
+	 * 
+	 * @exception None
+	 */
 	public ArrayList<Area> getAreas() {
 		return areas;
 	}
 
-	public boolean setAreas(ArrayList<Area> areas) {
-		if(areas != null && !areas.isEmpty()) {
-			this.areas.addAll(areas);
-			return true;
-		}
-		return false;
-	}
 	
+	/***
+	 * Add user to the users Collection. In case the User already exists update the data.
+	 * 
+	 * @param User user
+	 *  
+	 * @return Success criteria (Created/Updated) - Type String.
+	 * 
+	 * @exception
+	 */	
 	public String setUser(User user) throws Exception {
 		if(user.getToken() !=null && !user.getToken().isEmpty()) {
 			
 			
-			return null;
+			return "sss";
 		}else {
 			throw new Exception("token is empty or null.");
 		}

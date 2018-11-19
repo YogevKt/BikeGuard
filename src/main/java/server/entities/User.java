@@ -22,6 +22,10 @@ public class User implements ILocation {
 	public String getToken() {
 		return token;
 	}
+	
+	public GpsCoords getCoords() {
+		return coords;
+	}
 
 	public boolean setType(UserType type) {
 		if (type != null) {
@@ -42,30 +46,26 @@ public class User implements ILocation {
 
 	@Override
 	public double getLongitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getCoords().getLongitude();
 	}
 
 	@Override
 	public double getLatitude() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getCoords().getLatitude();
 	}
 
 	@Override
 	public void setLongitude(double longitude) {
-		// TODO Auto-generated method stub
-		
+		this.coords.setLongitude(longitude);
 	}
 
 	@Override
 	public void setLatitude(double latitude) {
-		// TODO Auto-generated method stub
-		
+		this.coords.setLatitude(latitude);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("User type: %s", this.type);
+		return String.format("User type: %s, Coords: %s", this.type, this.coords);
 	}
 }
