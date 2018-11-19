@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import server.entities.Area;
 import server.entities.Intersection;
+import server.entities.User;
 
 public class ServerFacade {
 	
@@ -13,7 +14,6 @@ public class ServerFacade {
 	private ServerFacade() {
 		areas = new ArrayList<>();
 	}
-	
 	
 	public static ServerFacade getInstance(){
 		if(serverFacade == null)
@@ -27,21 +27,30 @@ public class ServerFacade {
 		for (Area area : areas) {
 			allIntersections.addAll(area.getIntersections());
 		}
-		
 		return allIntersections;
 	}
-
 
 	public ArrayList<Area> getAreas() {
 		return areas;
 	}
 
-
-	public void setAreas(ArrayList<Area> areas) {
-		this.areas = areas;
+	public boolean setAreas(ArrayList<Area> areas) {
+		if(areas != null && !areas.isEmpty()) {
+			this.areas.addAll(areas);
+			return true;
+		}
+		return false;
 	}
 	
-	
+	public String setUser(User user) throws Exception {
+		if(user.getToken() !=null && !user.getToken().isEmpty()) {
+			
+			
+			return null;
+		}else {
+			throw new Exception("token is empty or null.");
+		}
+	}
 	
 	
 }
