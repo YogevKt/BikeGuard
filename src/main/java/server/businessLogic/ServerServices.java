@@ -52,9 +52,13 @@ public class ServerServices implements Runnable{
 	
 	/*** 
 	 * Dont know if its should be thread or call by user update function? 
+	 * @throws Exception 
 	 */
-	private void detectEntranceToIntersection(User user) {
+	private void detectEntranceToIntersection(User user) throws Exception {
 		ArrayList<Intersection> intersections = ServerFacade.getInstance().getIntersections();
+		
+		if(intersections == null)
+			throw new Exception("Cant detect entrance because intersection null or havn't loaded properly.");
 		
 		for (Intersection intersection : intersections) {
 			try {
