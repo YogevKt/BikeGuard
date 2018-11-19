@@ -3,6 +3,8 @@ package server.entities;
 
 public abstract class Location implements ILocation{
 	
+	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
+	
 	private double longitude;
 	private double latitude;
 	

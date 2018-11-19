@@ -76,4 +76,20 @@ public class ServerFacade {
 	}
 	
 	
+	
+	/***
+	 * Load Intersection data from DB
+	 * 
+	 * @param None
+	 *  
+	 * @return Success criteria (Created/Updated) - Type String.
+	 * 
+	 * @exception
+	 */	
+	public void loadIntersectionFromDB() {
+		
+	}
+	
+	
+	
 }
