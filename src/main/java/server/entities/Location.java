@@ -4,6 +4,7 @@ package server.entities;
 public abstract class Location implements ILocation{
 	
 	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
+	public static final int AREA_DISTANCE_RADIUS = 1000;
 	
 	private double longitude;
 	private double latitude;
@@ -51,6 +52,6 @@ public abstract class Location implements ILocation{
 	
 	@Override
 	public String toString() {
-		return String.format("[%lf,%lf]", this.longitude, this.latitude);
+		return String.format("[%f,%f]", this.longitude, this.latitude);
 	}
 }

@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.User;
+import server.entities.User.UserType;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController implements IRestController{
@@ -75,16 +76,14 @@ public class RestController implements IRestController{
 	
 	
 
-	@RequestMapping(value="check", method = RequestMethod.GET)
-	public String check() {
+	@RequestMapping(value="check", method = RequestMethod.POST)
+	public String check(@RequestBody String token) {
+		System.err.println(token);
+		User user = new User(token, UserType.DRIVER, new GpsCoords(1, 2));
+		FireBaseServiceHandler.sendPushNotification(user, "May", "Dekel");
 		
-		Gson gson = new Gson();
 		
-		User user = new User("asdasd", User.UserType.DRIVER, new GpsCoords(4.5, 3.2));
-		
-		JsonArray json = new JsonArray();
-		
-		return gson.toJson(user);
+		return "yoyo";
 	}
 	
 }

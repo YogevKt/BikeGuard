@@ -58,7 +58,8 @@ public class ServerFacade {
 	
 	/***
 	 * Add user to the users Collection. In case the User already exists update the data.
-	 * 
+	 * Check if user entered to dangerous intersection area.
+	 *  
 	 * @param User user
 	 *  
 	 * @return Success criteria (Created/Updated) - Type String.
@@ -68,14 +69,14 @@ public class ServerFacade {
 	public String setUser(User user) throws Exception {
 		if(user.getToken() !=null && !user.getToken().isEmpty()) {
 			
-			
+			//start detection of entrance to dangerous intersection
+			detectEntranceToIntersection(user);
 			return "sss";
 		}else {
 			throw new Exception("token is empty or null.");
 		}
 	}
-	
-	
+		
 	
 	/***
 	 * Load Intersection data from DB
@@ -88,6 +89,117 @@ public class ServerFacade {
 	 */	
 	public void loadIntersectionFromDB() {
 		
+	}
+	
+	/*** 
+	 * Detection of entrance to dangerous intersection
+	 * 
+	 * @param User
+	 * 
+	 * @throws Exception 
+	 */
+	private String detectEntranceToIntersection(User user) throws Exception {
+		final String TITLE = "User Alert";
+		final String BODY = "User has been entered to dangerous intersection area.";
+		ArrayList<Intersection> intersections = ServerFacade.getInstance().getIntersections();
+		
+		if(intersections == null)
+			throw new Exception("Cant detect entrance because intersection null or havn't loaded properly.");
+		
+		for (Intersection intersection : intersections) {
+			try {
+				if(Location.distance(intersection, user.getCoords()) <= Location.INTERSECTION_NOTIFICATION_DISTANCE) {
+					switch (user.getType()) {
+					case BIKER:
+						intersection.addBiker(user);
+						break;
+					case DRIVER:
+						intersection.addDriver(user);
+						break;
+					default:
+						throw new Exception("Couldn't recognize user type.");
+					}
+					//Send notification
+					return FireBaseServiceHandler.sendPushNotification(user,TITLE,BODY);
+				}
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+				return "Error";
+			}
+		}
+		
+		return "Error";
+	}
+	
+	
+	/*** 
+	 * Add new area
+	 * 
+	 * @param Area
+	 * 
+	 * @throws Exception 
+	 */
+	public void addArea(Area area) throws Exception {
+		if(area !=null) {
+			this.areas.add(area);
+		}else {
+			throw new Exception("The area you tried to had is null");			
+		}
+	}
+	
+	/*** 
+	 * Add new collection of areas
+	 * 
+	 * @param ArrayList<Area>
+	 * 
+	 * @throws Exception 
+	 */
+	public void addArea(ArrayList<Area> areas) throws Exception {
+		if(areas !=null && !areas.isEmpty()) {
+			this.areas.addAll(areas);
+		}else {
+			throw new Exception("The areas you tried to had is null or empty");			
+		}
+	}
+	
+
+	/*** 
+	 * Add new intersection
+	 * 
+	 * @param Intersection
+	 * 
+	 * @throws Exception 
+	 */
+	public void addIntersection(Intersection intersection) throws Exception {
+		if(intersection !=null) {
+			for (Area area : areas) {
+				if(Location.distance(area, intersection) < Location.AREA_DISTANCE_RADIUS) {
+					area.addIntersection(intersection);
+				}
+			}
+		}else {			
+			throw new Exception("The intersection you tried to had is null");
+		}
+	}
+	
+	/*** 
+	 * Add new collection of intersections to area
+	 * 
+	 * @param ArrayList<Intersection>
+	 * 
+	 * @throws Exception 
+	 */
+	public void addIntersection(Area area, ArrayList<Intersection> intersections) throws Exception {
+		if(area !=null && intersections != null && !intersections.isEmpty()) {
+			for (Intersection intersection : intersections) {
+				if(Location.distance(area, intersection) < Location.AREA_DISTANCE_RADIUS) {
+					area.addIntersection(intersection);
+				}
+			}
+		}else {
+			throw new Exception("The intersections you tried to had is null or empty");			
+		}
 	}
 	
 	

@@ -13,6 +13,8 @@ public class User implements ILocation {
 	public User(String token, UserType type, GpsCoords coords) {
 		setToken(token);
 		setType(type);
+		setLongitude(coords.getLongitude());
+		setLatitude(coords.getLatitude());
 	}
 
 	public UserType getType() {
