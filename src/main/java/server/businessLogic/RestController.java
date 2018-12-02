@@ -22,8 +22,6 @@ import server.entities.User.UserType;
 @org.springframework.web.bind.annotation.RestController
 public class RestController implements IRestController{
 	
-	private Gson gson = new Gson();
-	
 	@Override
 	@RequestMapping(value="updateGPSCoords/{token}", method = RequestMethod.POST)
 	public ResponseEntity<String> updateGpsCoords(@PathVariable("token") String token, @RequestBody GpsCoords userCoords) {
@@ -79,48 +77,30 @@ public class RestController implements IRestController{
 	////////////////////////////////
 	
 	@RequestMapping(value="checkMessage", method = RequestMethod.POST)
-	public String checkMessage() {
-		System.err.println("checkMessage");
-		FireBaseServiceHandler.sendPushNotification(new User("", UserType.DRIVER, new GpsCoords(22.1, 33.2)), "test notification", "this is a test.");
+	public String checkMessage(@RequestBody User user) {
+		
+		FireBaseServiceHandler.sendPushNotification(new User(user.getToken(),
+				user.getType(), user.getCoords()), "test notification", "this is a test.");
+		
 		return "Check Message Worked";
 	}
-	
+
 	@RequestMapping(value = "sendUserData", method = RequestMethod.POST)
-	public ResponseEntity<String> updateUser(@RequestBody Map<String, String> data){
-		User user = null;
+	public String sendUserData(@RequestBody User user){
 		String respone;
 		
-		if(data.containsKey("user"))
-			user = gson.fromJson(data.get("user"), User.class);
-		
-		if(data.containsKey("coords")) {
-			GpsCoords gpsCoords = gson.fromJson(data.get("coords"), GpsCoords.class);
-			if(user != null) {
-				user.setLatitude(gpsCoords.getLatitude());
-				user.setLongitude(gpsCoords.getLongitude());
-			}else {
-				return new ResponseEntity<String>("User data did not send correctly",HttpStatus.EXPECTATION_FAILED);
-			}
-		}
-		
-		try {
-			respone = ServerFacade.getInstance().setUser(user);
-		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(),HttpStatus.EXPECTATION_FAILED);
-		}
-
 		System.err.println("user: "+user);
-		return new ResponseEntity<String>("User "+respone,HttpStatus.OK);
-	}
+		try {
+			if (user == null) {
+				respone = ServerFacade.getInstance().setUser(user);
+			}else {
+				return "User data did not send correctly";
+			}
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 
-	@RequestMapping(value="check", method = RequestMethod.POST)
-	public String check(@RequestBody String token) {
-		System.err.println(token);
-		User user = new User(token, UserType.DRIVER, new GpsCoords(1, 2));
-		FireBaseServiceHandler.sendPushNotification(user, "May", "Dekel");
-		
-		
-		return "yoyo";
+		return "User "+respone;
 	}
 	
 }
