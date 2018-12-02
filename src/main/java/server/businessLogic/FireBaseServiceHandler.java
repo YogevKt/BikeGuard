@@ -13,7 +13,7 @@ import server.entities.User;
 public class FireBaseServiceHandler {
 	
 	// Method to send Notifications from server to client end.
-	public final static String AUTH_KEY_FCM = "AIzaSyDQlPkiokCblX0wf7fVBI0-Esy60vIm57c";//"SERVER_KEY_HERE";
+	public final static String AUTH_KEY_FCM = "AIzaSyARny0iGRtcLmdjd63G92ZF-Hu9ByebwCg";//"SERVER_KEY_HERE";
 	public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 	
 	

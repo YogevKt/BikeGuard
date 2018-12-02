@@ -35,14 +35,6 @@ public class Intersection extends Location{
 		return false;
 	}
 	
-	public boolean addBikers(Collection<User> bikers) {
-		if(bikers != null && !bikers.isEmpty()) {
-			this.bikers.addAll(bikers);
-			return true;
-		}
-		
-		return false;
-	}
 	
 	public boolean addDriver(User driver) {
 		if(driver != null) {
@@ -52,16 +44,6 @@ public class Intersection extends Location{
 		
 		return false;
 	}
-	
-	public boolean addDrivers(Collection<User> drivers) {
-		if(drivers != null && !drivers.isEmpty()) {
-			this.drivers.addAll(drivers);
-			return true;
-		}
-		
-		return false;
-	}
-	
 	
 	
 }
