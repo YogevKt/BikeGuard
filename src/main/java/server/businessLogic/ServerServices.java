@@ -3,9 +3,12 @@ package server.businessLogic;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.tomcat.jni.Thread;
 
+import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Intersection;
 import server.entities.Location;
 import server.entities.User;
@@ -26,13 +29,21 @@ public class ServerServices implements Runnable{
 		
 		
 		//start collision monitor thread
-		Executors.newSingleThreadExecutor().execute(new Runnable() {
+		/*Executors.newSingleThreadExecutor().execute(new Runnable() {
 		    @Override
 		    public void run() {
 		        //TODO collision monitor function
 		    	collisionMonitor();
 		    }
-		});
+		});*/
+		
+		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+		exec.scheduleWithFixedDelay(new Runnable() {
+		  @Override
+		  public void run() {
+			  collisionMonitor();
+		  }
+		}, 0, 2, TimeUnit.SECONDS);
 	
 	}
 	
@@ -74,14 +85,25 @@ public class ServerServices implements Runnable{
 		
 		try {
 			for (User biker : bikers) {
-			double distance = Location.distance(driver.getCoords(), biker.getCoords());
-			
-			if(distance <=75 && distance >35) {
-				//medium alert
-				
-			}else if(distance<=35) {
-				//high alert
-			}
+				double distance = Location.distance(driver.getCoords(), biker.getCoords());
+				boolean isAlerted;
+
+				if(distance <=75 && distance >35) {
+					//medium alert
+					isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.MEDIUM);
+					
+					if(!isAlerted)	{
+						FireBaseServiceHandler.sendPushNotification(biker,"Medium Alert","In "+(int)distance+" there's a driver");
+					}
+					
+				}else if(distance<=35) {
+					//high alert
+					isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.HIGH);
+					
+					if(!isAlerted) {
+						FireBaseServiceHandler.sendPushNotification(biker,"High Alert","In "+(int)distance+"m there's a driver");
+					}
+				}
 					
 			}
 		} catch (Exception e) {

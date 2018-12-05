@@ -2,6 +2,7 @@ package server.businessLogic;
 
 import java.util.ArrayList;
 
+import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Area;
 import server.entities.Intersection;
 import server.entities.Location;
@@ -67,11 +68,10 @@ public class ServerFacade {
 	 * @exception
 	 */	
 	public String setUser(User user) throws Exception {
-		if(user.getToken() !=null && !user.getToken().isEmpty()) {
+		if(user.getToken() != null && !user.getToken().isEmpty()) {
 			
 			//start detection of entrance to dangerous intersection
-			detectEntranceToIntersection(user);
-			return "sss";
+			return detectEntranceToIntersection(user);
 		}else {
 			throw new Exception("token is empty or null.");
 		}
@@ -120,7 +120,9 @@ public class ServerFacade {
 						throw new Exception("Couldn't recognize user type.");
 					}
 					//Send notification
-					return FireBaseServiceHandler.sendPushNotification(user,TITLE,BODY);
+					if (!UserAlertsService.getInstance().isUserAlerted(user.getToken(), Alert.INTERSECTION_ENTRANCE)) {
+						return FireBaseServiceHandler.sendPushNotification(user,TITLE,BODY);
+					}
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());

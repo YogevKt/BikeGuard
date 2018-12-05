@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import server.businessLogic.ServerFacade;
 import server.businessLogic.ServerServices;
 import server.entities.Area;
+import server.entities.GpsCoords;
 import server.entities.Intersection;
+import server.entities.User;
 
 @SpringBootApplication
 public class BikeGuardApplication {
@@ -31,18 +33,14 @@ public class BikeGuardApplication {
 			//add area
 			server.addArea(new Area(1,1));
 			
-			//add intersections
+			//add intersections			
+			server.addIntersection(new Intersection(34.800483,31.968111)); //76~ from may's home
+			server.addIntersection(new Intersection(34.800753,31.968210)); //46~ from may's home
+			server.addIntersection(new Intersection(34.801246,31.968244)); //17~ from may's home
 			
-			server.addIntersection(new Intersection(2, 2));
-			server.addIntersection(new Intersection(3, 3));
-			server.addIntersection(new Intersection(4, 4));
-			server.addIntersection(new Intersection(5, 5));
-			
-			
-			
-			
-			
-			
+			//add driver
+			server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+					User.UserType.DRIVER, new GpsCoords(34.800753,31.968210))); //may's home
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

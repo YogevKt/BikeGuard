@@ -88,10 +88,9 @@ public class RestController implements IRestController{
 	@RequestMapping(value = "sendUserData", method = RequestMethod.POST)
 	public String sendUserData(@RequestBody User user){
 		String respone;
-		
-		System.err.println("user: "+user);
+
 		try {
-			if (user == null) {
+			if (user != null) {
 				respone = ServerFacade.getInstance().setUser(user);
 			}else {
 				return "User data did not send correctly";
