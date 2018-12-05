@@ -13,8 +13,7 @@ public class UserAlertsService {
 	private static UserAlertsService instance = null;
 	
 	private UserAlertsService() {
-		mapUsersAlerts = new HashMap<>();
-		
+		mapUsersAlerts = new HashMap<>();	
 	}
 	
 	public static UserAlertsService getInstance() {
