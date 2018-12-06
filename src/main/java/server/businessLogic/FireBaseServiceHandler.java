@@ -57,7 +57,7 @@ public class FireBaseServiceHandler {
 	                response.append(inputLine);
 	            }
 	            
-	            System.out.println("Resonse: " + response);
+	            System.out.println("Response: " + response);
 	            
 	            in.close();
 	            
