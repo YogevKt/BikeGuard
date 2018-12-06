@@ -108,7 +108,9 @@ public class ServerFacade {
 		
 		for (Intersection intersection : intersections) {
 			try {
-				if(Location.distance(intersection, user.getCoords()) <= Location.INTERSECTION_NOTIFICATION_DISTANCE) {
+				double distance = Location.distance(intersection, user.getCoords());
+
+				if( distance <= Location.INTERSECTION_NOTIFICATION_DISTANCE) {
 					switch (user.getType()) {
 					case BIKER:
 						intersection.addBiker(user);
@@ -119,10 +121,15 @@ public class ServerFacade {
 					default:
 						throw new Exception("Couldn't recognize user type.");
 					}
+					
 					//Send notification
 					if (!UserAlertsService.getInstance().isUserAlerted(user.getToken(), Alert.INTERSECTION_ENTRANCE)) {
 						return FireBaseServiceHandler.sendPushNotification(user,TITLE,BODY);
 					}
+					
+				}else if(distance > Location.INTERSECTION_NOTIFICATION_DISTANCE) { //can be less than X
+					if(intersection.removeUser(user) != null)
+						UserAlertsService.getInstance().removeUserAlert(user.getToken());
 				}
 			} catch (Exception e) {
 				System.err.println(e.getMessage());

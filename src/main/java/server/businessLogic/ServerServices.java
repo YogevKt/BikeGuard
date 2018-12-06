@@ -2,6 +2,10 @@ package server.businessLogic;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +24,7 @@ public class ServerServices implements Runnable{
 	
 	@Override
 	public void run() {
-		System.err.println(">>>  Start Server Services Thread  <<<");
+		
 
 		// init intersections from DB
 		ServerFacade.getInstance().loadIntersectionFromDB();
@@ -59,7 +63,6 @@ public class ServerServices implements Runnable{
 	 * 
 	 */
 	private void collisionMonitor() {
-		System.err.println(">>>  Collision Monitor Thread  <<<");
 		//Create stream contains task for each intersection
 		
 		ServerFacade.getInstance().getIntersections().parallelStream().forEach(intersection -> checkCollision(intersection));
@@ -73,42 +76,56 @@ public class ServerServices implements Runnable{
 	
 	private void checkCollision(Intersection intersection) {
 		if(intersection != null) {
-			ArrayList<User> drivers = intersection.getDrivers();
+			Map<String, User> drivers = intersection.getDrivers();
 			if(drivers != null) {
-				drivers.parallelStream().forEach(driver -> alertCollision(driver,intersection.getBikers()));
+				drivers.values().parallelStream().forEach(driver -> alertCollision(driver,intersection.getBikers()));
 			}
 		}
 	}
 	
-	private void alertCollision(User driver , ArrayList<User> bikers) {
-		double minimumDistance;
-		
-		try {
-			for (User biker : bikers) {
-				double distance = Location.distance(driver.getCoords(), biker.getCoords());
-				boolean isAlerted;
+	private void alertCollision(User driver , Map<String, User> bikers) {
+		double minDistance = Location.MEDIUM_ALERT_DISTANCE;
+		User biker;
+		User closestBiker = null;
 
-				if(distance <=75 && distance >35) {
-					//medium alert
-					isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.MEDIUM);
-					
-					if(!isAlerted)	{
-						FireBaseServiceHandler.sendPushNotification(biker,"Medium Alert","In "+(int)distance+" there's a driver");
-					}
-					
-				}else if(distance<=35) {
-					//high alert
-					isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.HIGH);
-					
-					if(!isAlerted) {
-						FireBaseServiceHandler.sendPushNotification(biker,"High Alert","In "+(int)distance+"m there's a driver");
-					}
+		try {
+			Iterator<User> bikersIterator = bikers.values().iterator();
+			
+			while(bikersIterator.hasNext()) {
+				biker = bikersIterator.next();
+				double distance = Location.distance(driver.getCoords(), biker.getCoords());
+				if(distance <= minDistance) {
+					minDistance = distance;
+					closestBiker = biker;
 				}
-					
+			}
+			if (closestBiker != null) {
+				sendCollisionAlert(driver, closestBiker, minDistance);
+				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	private void sendCollisionAlert(User driver, User biker, double distance) {
+		boolean isAlerted;
+		if(distance <= Location.MEDIUM_ALERT_DISTANCE && distance > Location.HIGH_ALERT_DISTANCE) {
+			//medium alert
+			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.MEDIUM);
+			
+			if(!isAlerted)	{
+				FireBaseServiceHandler.sendPushNotification(biker,"Medium Alert","In "+(int)distance+" there's a driver");
+			}
+			
+		}else if(distance <= Location.HIGH_ALERT_DISTANCE) {
+			//high alert
+			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.HIGH);
+			
+			if(!isAlerted) {
+				FireBaseServiceHandler.sendPushNotification(biker,"High Alert","In "+(int)distance+"m there's a driver");
+			}
 		}
 	}
 	

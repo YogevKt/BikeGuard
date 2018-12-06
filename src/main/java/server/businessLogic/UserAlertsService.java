@@ -30,7 +30,7 @@ public class UserAlertsService {
 	 * @param String, UserAlertsService.Alert
 	 * 
 	 */
-	private void addUserAlert(String token, Alert alert) {
+	private void setUserAlert(String token, Alert alert) {
 		
 		if(mapUsersAlerts.containsKey(token)) {
 			mapUsersAlerts.get(token).alertOccurred(alert);
@@ -57,9 +57,16 @@ public class UserAlertsService {
 		}
 	
 		if(!res)
-			addUserAlert(token, alert);
+			setUserAlert(token, alert);
 		
 		return res;
+	}
+	
+	public void removeUserAlert(String token) {
+		
+		if(mapUsersAlerts.containsKey(token)) {
+			mapUsersAlerts.remove(token);
+		}
 	}
 	
 	
@@ -69,7 +76,7 @@ public class UserAlertsService {
 		
 		public UserAlerts(Alert alert) {
 			isUserAlerted = new boolean[Alert.values().length];
-			isUserAlerted[alert.ordinal()] = true;
+			alertOccurred(alert);
 		}
 		
 		public boolean isAlerted(Alert alert) {

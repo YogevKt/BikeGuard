@@ -40,7 +40,7 @@ public class BikeGuardApplication {
 			
 			//add driver
 			server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
-					User.UserType.DRIVER, new GpsCoords(34.800753,31.968210))); //may's home
+					User.UserType.DRIVER, new GpsCoords(34.800753,31.968210)));
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

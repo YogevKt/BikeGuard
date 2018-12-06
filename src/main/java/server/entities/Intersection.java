@@ -1,34 +1,34 @@
 package server.entities;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Intersection extends Location{
 	
-	private ArrayList<User> bikers = null;
-	private ArrayList<User> drivers = null;
+	private Map<String, User> bikers = null;
+	private Map<String, User> drivers = null;
 
 	public Intersection(double longitude, double latitude) {
 		setLongitude(longitude);
 		setLatitude(latitude);
 		
-		bikers = new ArrayList<>();
-		drivers = new ArrayList<>();
+		bikers = new HashMap<>();
+		drivers = new HashMap<>();
 		
 	}
 
-	public ArrayList<User> getBikers() {
+	public Map<String, User> getBikers() {
 		return bikers;
 	}
 
-	public ArrayList<User> getDrivers() {
+	public Map<String, User> getDrivers() {
 		return drivers;
 	}
 
 
 	public boolean addBiker(User biker) {
-		if(biker != null) {
-			this.bikers.add(biker);
+		if(biker != null && !biker.getToken().isEmpty()) {
+			this.bikers.put(biker.getToken(), biker);
 			return true;
 		}
 		
@@ -37,12 +37,27 @@ public class Intersection extends Location{
 	
 	
 	public boolean addDriver(User driver) {
-		if(driver != null) {
-			this.drivers.add(driver);
+		if(driver != null && !driver.getToken().isEmpty()) {
+			this.drivers.put(driver.getToken(), driver);
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public User removeUser(User user) {
+		
+		if(user != null && !user.getToken().isEmpty()) {
+			
+			switch(user.getType()) {
+				case BIKER:
+					return bikers.remove(user.getToken());
+				case DRIVER:
+					return drivers.remove(user.getToken());
+			}
+		}
+		
+		return null;
 	}
 	
 	

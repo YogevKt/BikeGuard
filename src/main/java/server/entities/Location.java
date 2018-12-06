@@ -5,6 +5,8 @@ public abstract class Location implements ILocation{
 	
 	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
 	public static final int AREA_DISTANCE_RADIUS = 1000;
+	public static final double HIGH_ALERT_DISTANCE = 35;
+	public static final double MEDIUM_ALERT_DISTANCE = 75;
 	
 	private double longitude;
 	private double latitude;
