@@ -8,7 +8,7 @@ public class Intersection extends Location{
 	private Map<String, User> bikers = null;
 	private Map<String, User> drivers = null;
 
-	public Intersection(double longitude, double latitude) {
+	public Intersection(double latitude, double longitude) {
 		setLongitude(longitude);
 		setLatitude(latitude);
 		
