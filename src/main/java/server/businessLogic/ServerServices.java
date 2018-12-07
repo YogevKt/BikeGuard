@@ -1,16 +1,11 @@
 package server.businessLogic;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.tomcat.jni.Thread;
 
 import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Intersection;
@@ -33,14 +28,6 @@ public class ServerServices implements Runnable{
 		
 		
 		//start collision monitor thread
-		/*Executors.newSingleThreadExecutor().execute(new Runnable() {
-		    @Override
-		    public void run() {
-		        //TODO collision monitor function
-		    	collisionMonitor();
-		    }
-		});*/
-		
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleWithFixedDelay(new Runnable() {
 		  @Override
@@ -104,7 +91,6 @@ public class ServerServices implements Runnable{
 				
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

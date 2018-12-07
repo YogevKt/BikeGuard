@@ -8,7 +8,7 @@ import server.entities.Intersection;
 import server.entities.Location;
 import server.entities.User;
 
-public class ServerFacade {
+public class ServerFacade implements IServerFacade{
 	
 	private static ServerFacade serverFacade = null;
 	private ArrayList<Area> areas = null;
@@ -16,7 +16,7 @@ public class ServerFacade {
 	private ServerFacade() {
 		areas = new ArrayList<>();
 	}
-	
+
 	public static ServerFacade getInstance(){
 		if(serverFacade == null)
 			serverFacade = new ServerFacade();
@@ -34,6 +34,7 @@ public class ServerFacade {
 	 * 
 	 * @exception None
 	 */
+	@Override
 	public ArrayList<Intersection> getIntersections(){
 		ArrayList<Intersection> allIntersections = new ArrayList<>();
 		
@@ -67,6 +68,7 @@ public class ServerFacade {
 	 * 
 	 * @exception
 	 */	
+	@Override
 	public String setUser(User user) throws Exception {
 		if(user.getToken() != null && !user.getToken().isEmpty()) {
 			
@@ -87,6 +89,7 @@ public class ServerFacade {
 	 * 
 	 * @exception
 	 */	
+	@Override
 	public void loadIntersectionFromDB() {
 		
 	}
@@ -149,6 +152,7 @@ public class ServerFacade {
 	 * 
 	 * @throws Exception 
 	 */
+	@Override
 	public void addArea(Area area) throws Exception {
 		if(area !=null) {
 			this.areas.add(area);
@@ -164,6 +168,7 @@ public class ServerFacade {
 	 * 
 	 * @throws Exception 
 	 */
+	@Override
 	public void addArea(ArrayList<Area> areas) throws Exception {
 		if(areas !=null && !areas.isEmpty()) {
 			this.areas.addAll(areas);
@@ -180,6 +185,7 @@ public class ServerFacade {
 	 * 
 	 * @throws Exception 
 	 */
+	@Override
 	public void addIntersection(Intersection intersection) throws Exception {
 		if(intersection !=null) {
 			for (Area area : areas) {
@@ -199,6 +205,7 @@ public class ServerFacade {
 	 * 
 	 * @throws Exception 
 	 */
+	@Override
 	public void addIntersection(Area area, ArrayList<Intersection> intersections) throws Exception {
 		if(area !=null && intersections != null && !intersections.isEmpty()) {
 			for (Intersection intersection : intersections) {

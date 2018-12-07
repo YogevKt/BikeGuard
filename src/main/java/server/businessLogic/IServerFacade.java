@@ -1,5 +1,11 @@
 package server.businessLogic;
 
+import java.util.ArrayList;
+
+import server.entities.Area;
+import server.entities.Intersection;
+import server.entities.User;
+
 public interface IServerFacade {
 	
 	/*** 
@@ -14,7 +20,14 @@ public interface IServerFacade {
 	 * 
 	 * 
 	 * */
-	
+	ArrayList<Intersection> getIntersections();
+	String setUser(User user) throws Exception;
+	void loadIntersectionFromDB();
+	void addArea(Area area) throws Exception;
+	void addArea(ArrayList<Area> areas) throws Exception;
+	void addIntersection(Intersection intersection) throws Exception;
+	void addIntersection(Area area, ArrayList<Intersection> intersections) throws Exception;
+
 	
 	
 

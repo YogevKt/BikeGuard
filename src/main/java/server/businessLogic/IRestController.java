@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import server.entities.GpsCoords;
 import server.entities.Intersection;
+import server.entities.User;
 
 public interface IRestController {
 
-	ResponseEntity<String> updateGpsCoords(@PathVariable("token") String token, @RequestBody GpsCoords userCoords);
 	ArrayList<Intersection> getIntersection();
+	String sendUserData(@RequestBody User user);
 }

@@ -1,6 +1,5 @@
 package server;
 
-import java.util.ArrayList;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,16 +34,27 @@ public class BikeGuardApplication {
 			server.addArea(new Area(1,1));
 			
 			//add intersections			
-			server.addIntersection(new Intersection(34.800483,31.968111)); //76~ from may's home
-			server.addIntersection(new Intersection(34.800753,31.968210)); //46~ from may's home
-			server.addIntersection(new Intersection(34.801246,31.968244)); //17~ from may's home
+			//server.addIntersection(new Intersection(34.800483,31.968111)); //76~ from may's home
+			//server.addIntersection(new Intersection(34.800753,31.968210)); //46~ from may's home
+			//server.addIntersection(new Intersection(34.801246,31.968244)); //17~ from may's home
 			
-//			//add driver
-//			server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
-//					User.UserType.DRIVER, new GpsCoords(34.800753,31.968210)));
+			//add driver
+			//server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+					//User.UserType.DRIVER, new GpsCoords(34.800753,31.968210)));
 			
 			GpsCoords a = new GpsCoords(34.80131358328928, 31.968252524058602);
 			GpsCoords b = new GpsCoords(34.800753, 31.968210);
+			
+			
+			//add intersection nearby yogev's home
+			server.addIntersection(new Intersection(34.911650,32.268066));//95~ from yogev's home
+			server.addIntersection(new Intersection(34.267475,31.911670));//44~ from yogev's home
+			
+			server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+					User.UserType.BIKER, new GpsCoords(34.911553,32.267659)));
+			
+			
+			
 			
 			System.err.println(">>>>>>>>>>>>>  Test distance - > "+ Location.distance(a,b));
 			
