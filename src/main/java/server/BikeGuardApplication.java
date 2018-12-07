@@ -31,20 +31,19 @@ public class BikeGuardApplication {
 		try {
 			
 			//add area
-			server.addArea(new Area(1,1));
+			server.addArea(new Area(34.80140645543159,31.96828999958059));
 			
 			//add intersections			
-			//server.addIntersection(new Intersection(34.800483,31.968111)); //76~ from may's home
-			//server.addIntersection(new Intersection(34.800753,31.968210)); //46~ from may's home
-			//server.addIntersection(new Intersection(34.801246,31.968244)); //17~ from may's home
-			
-			//add driver
-			//server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
-					//User.UserType.DRIVER, new GpsCoords(34.800753,31.968210)));
-			
-			GpsCoords a = new GpsCoords(34.80131358328928, 31.968252524058602);
+			server.addIntersection(new Intersection(34.800483,31.968111)); //76~ from may's home
+			server.addIntersection(new Intersection(34.800753,31.968210)); //46~ from may's home
+			server.addIntersection(new Intersection(34.80140645543159,31.96828999958059)); //17~ from may's home
+						
+			GpsCoords a = new GpsCoords(34.80140645543159, 31.96828999958059);
 			GpsCoords b = new GpsCoords(34.800753, 31.968210);
 			
+			//add driver
+			/*server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+					User.UserType.DRIVER, new GpsCoords(34.800753,31.968210)));*/
 			
 			//add intersection nearby yogev's home
 			server.addIntersection(new Intersection(34.911650,32.268066));//95~ from yogev's home

@@ -102,8 +102,8 @@ public class ServerFacade implements IServerFacade{
 	 * @throws Exception 
 	 */
 	private String detectEntranceToIntersection(User user) throws Exception {
-		final String TITLE = "User Alert";
-		final String BODY = "User has been entered to dangerous intersection area.";
+		final String TITLE = "Dangerous Intersection";
+		final String BODY = "dangerous intersection ahead";
 		ArrayList<Intersection> intersections = ServerFacade.getInstance().getIntersections();
 		
 		if(intersections == null)

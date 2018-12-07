@@ -33,21 +33,21 @@ public class FireBaseServiceHandler {
 	            conn.setRequestMethod("POST");
 	            conn.setRequestProperty("Authorization", "key=" + authKey);
 	            conn.setRequestProperty("Content-Type", "application/json");
-	            System.out.println(DeviceIdKey);
+	            System.out.println(DeviceIdKey); // Form Debug
 	            JSONObject data = new JSONObject();
 	            data.put("to", DeviceIdKey.trim());
 	            JSONObject info = new JSONObject();
 	            info.put("title", title); // Notification title
 	            info.put("body", body); // Notification body
 	            data.put("notification", info);
-	            System.out.println(data.toString());
+	            System.out.println(data.toString()); // Form Debug
 	            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
 	            wr.write(data.toString());
 	            wr.flush();
 	            wr.close();
 
 	            int responseCode = conn.getResponseCode();
-	            System.out.println("Response Code : " + responseCode);
+	            System.out.println("Response Code : " + responseCode); // Form Debug
 
 	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 	            String inputLine;
@@ -57,7 +57,7 @@ public class FireBaseServiceHandler {
 	                response.append(inputLine);
 	            }
 	            
-	            System.out.println("Response: " + response);
+	            System.out.println("Response: " + response); // Form Debug
 	            
 	            in.close();
 	            
