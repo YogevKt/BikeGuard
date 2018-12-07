@@ -31,12 +31,23 @@ public class RestController implements IRestController{
 	}
 	
 	@Override
+	@RequestMapping(value = "addIntersection", method = RequestMethod.POST)
+	public void addIntersection(@RequestBody Intersection intersection){
+		try {
+			ServerFacade.getInstance().addIntersection(intersection);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	
+	@Override
 	@RequestMapping(value = "sendUserData", method = RequestMethod.POST)
 	public String sendUserData(@RequestBody User user){
 		String respone;
 
 		try {
-			if (user != null) {
+			if (user != null && user.getCoords() != null && !user.getToken().isEmpty()) {
 				respone = ServerFacade.getInstance().setUser(user);
 			}else {
 				return "User data did not send correctly";
