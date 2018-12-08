@@ -2,8 +2,11 @@ package server.businessLogic;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Area;
+import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.Location;
 import server.entities.User;
@@ -41,7 +44,20 @@ public class ServerFacade implements IServerFacade{
 		for (Area area : areas) {
 			allIntersections.addAll(area.getIntersections());
 		}
+
 		return allIntersections;
+	}
+	
+	public String getIntersectionsCoords(){
+		ArrayList<GpsCoords> allIntersectionsCoords = new ArrayList<>();
+		
+		for (Area area : areas) {
+			for(Intersection intersection : area.getIntersections()) {
+				allIntersectionsCoords.add(new GpsCoords(intersection.getLatitude(), intersection.getLongitude()));
+			}
+		}
+
+		return new Gson().toJson(allIntersectionsCoords);
 	}
 
 	/***

@@ -29,7 +29,7 @@ public class BikeGuardApplication {
 		ServerFacade server = ServerFacade.getInstance();
 		
 		try {
-			
+		
 			//add area
 			server.addArea(new Area(31.96828999958059,34.80140645543159));//area may
 			server.addArea(new Area(32.268066,34.911650));//area yogev
@@ -42,14 +42,15 @@ public class BikeGuardApplication {
 			//add intersection nearby yogev's home
 			server.addIntersection(new Intersection(32.268066, 34.911650));//95~ from yogev's home
 			server.addIntersection(new Intersection(31.911670,34.267475));//44~ from yogev's home
-							
+		
+			
 			//add driver
 			/*server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
 					User.UserType.DRIVER, new GpsCoords(31.968210,34.800753)));*/
 			
 			
-			server.setUser(new User("fAfBRGDJpf8:APA91bELeW-CBV1fJm8SqS8H-cDW7Gn7VX1yeAW0xyWpkDfECIcQSzCa0-2rP52D3NTDqIGhTT_TgYSapeGaEX7ks5WIfGlZO-dDvuRzfqAEjRNmfBNv3ToIj_l90eTkt0E08-ekQmL1",
-					User.UserType.BIKER, new GpsCoords(32.267659,34.911553)));
+			/*server.setUser(new User("fAfBRGDJpf8:APA91bELeW-CBV1fJm8SqS8H-cDW7Gn7VX1yeAW0xyWpkDfECIcQSzCa0-2rP52D3NTDqIGhTT_TgYSapeGaEX7ks5WIfGlZO-dDvuRzfqAEjRNmfBNv3ToIj_l90eTkt0E08-ekQmL1",
+					User.UserType.BIKER, new GpsCoords(32.267659,34.911553)));*/
 			
 			
 		} catch (Exception e) {
