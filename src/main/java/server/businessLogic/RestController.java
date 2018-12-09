@@ -1,25 +1,14 @@
 package server.businessLogic;
 
 import java.util.ArrayList;
-import java.util.Map;
-
-import javax.xml.ws.Response;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 
 import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.User;
-import server.entities.User.UserType;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController implements IRestController{
@@ -29,7 +18,6 @@ public class RestController implements IRestController{
 	@Override
 	@RequestMapping(value="getIntersection", method = RequestMethod.GET)
 	public ArrayList<Intersection> getIntersection() { 
-		System.err.println("getIntersections");
 		
 		return ServerFacade.getInstance().getIntersections();
 	}
@@ -38,8 +26,10 @@ public class RestController implements IRestController{
 	@RequestMapping(value="getIntersections", method = RequestMethod.GET)
 	public String getIntersections() { 
 		System.err.println("getIntersections");
-		
-		return new Gson().toJson(ServerFacade.getInstance().getIntersectionsCoords());
+		Gson gson = new Gson();
+
+	
+		return gson.toJson(ServerFacade.getInstance().getIntersections());
 	}
 	
 	@Override

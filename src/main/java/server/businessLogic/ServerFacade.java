@@ -48,7 +48,7 @@ public class ServerFacade implements IServerFacade{
 		return allIntersections;
 	}
 	
-	public String getIntersectionsCoords(){
+	public ArrayList<GpsCoords> getIntersectionsCoords(){
 		ArrayList<GpsCoords> allIntersectionsCoords = new ArrayList<>();
 		
 		for (Area area : areas) {
@@ -57,7 +57,7 @@ public class ServerFacade implements IServerFacade{
 			}
 		}
 
-		return new Gson().toJson(allIntersectionsCoords);
+		return allIntersectionsCoords;
 	}
 
 	/***

@@ -44,7 +44,7 @@ public abstract class Location implements ILocation{
 	public static double distance(Location coordA, Location coordB) throws Exception {
 		if(coordA != null && coordB != null) {
 			double res = distance(coordA.getLatitude(), coordA.getLongitude(), coordB.getLatitude(), coordB.getLongitude());
-			return res;
+			return res/1000.0;
 		}else {
 			throw new Exception("Coord A or B was null");
 		}
@@ -67,6 +67,6 @@ public abstract class Location implements ILocation{
 	
 	@Override
 	public String toString() {
-		return String.format("[%f,%f]", this.longitude, this.latitude);
+		return String.format("[%f,%f]", this.latitude, this.longitude);
 	}
 }
