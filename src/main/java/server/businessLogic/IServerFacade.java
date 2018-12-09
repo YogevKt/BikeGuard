@@ -3,6 +3,7 @@ package server.businessLogic;
 import java.util.ArrayList;
 
 import server.entities.Area;
+import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.User;
 
@@ -27,6 +28,8 @@ public interface IServerFacade {
 	void addArea(ArrayList<Area> areas) throws Exception;
 	void addIntersection(Intersection intersection) throws Exception;
 	void addIntersection(Area area, ArrayList<Intersection> intersections) throws Exception;
+	public ArrayList<GpsCoords> getIntersectionsCoords();
+	public User removeUserFromIntersection(User user);
 
 	
 	

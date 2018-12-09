@@ -33,6 +33,14 @@ public class Area extends Location{
 		return false;
 	}
 	
+	public User removeUser(User user) {
+		for (Intersection intersection : intersections) {
+			return intersection.removeUser(user);
+		}
+		
+		return null;
+	}
+	
 	
 	
 }

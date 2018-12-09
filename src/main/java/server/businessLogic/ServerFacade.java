@@ -48,6 +48,16 @@ public class ServerFacade implements IServerFacade{
 		return allIntersections;
 	}
 	
+	/***
+	 * Returns Collection with all the intersection Coords from each area.
+	 * 
+	 * @param None
+	 *  
+	 * @return Array<Intersection>
+	 * 
+	 * @exception None
+	 */
+	@Override
 	public ArrayList<GpsCoords> getIntersectionsCoords(){
 		ArrayList<GpsCoords> allIntersectionsCoords = new ArrayList<>();
 		
@@ -232,6 +242,21 @@ public class ServerFacade implements IServerFacade{
 		}else {
 			throw new Exception("The intersections you tried to had is null or empty");			
 		}
+	}
+	
+	/*** 
+	 * Remove user
+	 * 
+	 * @param ArrayList<Intersection>
+	 * 
+	 * @throws Exception 
+	 */
+	@Override
+	public User removeUserFromIntersection(User user) {
+		for (Area area : areas) {
+			return area.removeUser(user);
+		}
+		return null;
 	}
 	
 	

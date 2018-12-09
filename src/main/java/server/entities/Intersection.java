@@ -46,7 +46,6 @@ public class Intersection extends Location{
 	}
 	
 	public User removeUser(User user) {
-		
 		if(user != null && !user.getToken().isEmpty()) {
 			
 			switch(user.getType()) {

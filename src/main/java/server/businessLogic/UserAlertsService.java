@@ -63,7 +63,6 @@ public class UserAlertsService {
 	}
 	
 	public void removeUserAlert(String token) {
-		
 		if(mapUsersAlerts.containsKey(token)) {
 			mapUsersAlerts.remove(token);
 		}

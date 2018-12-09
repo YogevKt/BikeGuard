@@ -15,4 +15,6 @@ public interface IRestController {
 	ArrayList<Intersection> getIntersection();
 	String sendUserData(@RequestBody User user);
 	void addIntersection(@RequestBody Intersection intersection);
+	public String getIntersections();
+	public void userExit(User user);
 }

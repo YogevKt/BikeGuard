@@ -13,7 +13,14 @@ import server.entities.User;
 @org.springframework.web.bind.annotation.RestController
 public class RestController implements IRestController{
 	
-	
+	@Override
+	@RequestMapping(value="userExit", method = RequestMethod.POST)
+	public void userExit(@RequestBody User user) {
+		if(user != null && !user.getToken().isEmpty()) {
+			UserAlertsService.getInstance().removeUserAlert(user.getToken());
+			ServerFacade.getInstance().removeUserFromIntersection(user);
+		}
+	}
 	
 	@Override
 	@RequestMapping(value="getIntersection", method = RequestMethod.GET)
@@ -22,14 +29,12 @@ public class RestController implements IRestController{
 		return ServerFacade.getInstance().getIntersections();
 	}
 	
-
-	@RequestMapping(value="getIntersections", method = RequestMethod.GET)
+	@Override
+	@RequestMapping(value="getIntersectionsCoords", method = RequestMethod.GET)
 	public String getIntersections() { 
 		System.err.println("getIntersections");
-		Gson gson = new Gson();
 
-	
-		return gson.toJson(ServerFacade.getInstance().getIntersections());
+		return new Gson().toJson(ServerFacade.getInstance().getIntersections());
 	}
 	
 	@Override
