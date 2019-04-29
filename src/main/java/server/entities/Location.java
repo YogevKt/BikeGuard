@@ -1,6 +1,10 @@
 package server.entities;
 
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public abstract class Location implements ILocation{
 	
 	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
@@ -10,8 +14,8 @@ public abstract class Location implements ILocation{
 	
 	private double longitude;
 	private double latitude;
-	
-	
+
+
 	@Override
 	public double getLongitude() {
 		return longitude;

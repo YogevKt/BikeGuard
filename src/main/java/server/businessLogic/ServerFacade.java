@@ -1,11 +1,12 @@
 package server.businessLogic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import server.businessLogic.UserAlertsService.Alert;
-import server.dal.IntersectionRepo;
+import server.dal.AreasDao;
 import server.entities.Area;
 import server.entities.GpsCoords;
 import server.entities.Intersection;
@@ -13,11 +14,12 @@ import server.entities.Location;
 import server.entities.User;
 
 public class ServerFacade implements IServerFacade{
-	
-	@Autowired
-	private IntersectionRepo intersectionRepo;
+
 	private static ServerFacade serverFacade = null;
-	private ArrayList<Area> areas = null;
+	private List<Intersection> intersections = null;
+	private List<Area> areas = null;
+	@Autowired
+	private AreasDao areasDao;
 	
 	private ServerFacade() {
 		areas = new ArrayList<>();
@@ -42,14 +44,16 @@ public class ServerFacade implements IServerFacade{
 	 * @exception None
 	 */
 	@Override
-	public ArrayList<Intersection> getIntersections(){
-		ArrayList<Intersection> allIntersections = new ArrayList<>();
-		
-		for (Area area : areas) {
-			allIntersections.addAll(area.getIntersections());
+	public List<Intersection> getIntersections(){
+		if(intersections == null) {
+			intersections = new ArrayList<Intersection>();
+
+			for (Area area : areas) {
+				intersections.addAll(area.getIntersections());
+			}
 		}
 
-		return allIntersections;
+		return intersections;
 	}
 	
 	/***
@@ -83,7 +87,7 @@ public class ServerFacade implements IServerFacade{
 	 * 
 	 * @exception None
 	 */
-	public ArrayList<Area> getAreas() {
+	public List<Area> getAreas() {
 		return areas;
 	}
 
@@ -120,12 +124,8 @@ public class ServerFacade implements IServerFacade{
 	 */	
 	@Override
 	public void loadIntersectionFromDB() {
-		Iterable<Intersection> intersections = intersectionRepo.findAll();
-		
-		//TODO sort intersections by area
-		for (Intersection intersection : intersections) {
-			areas.get(0).addIntersection(intersection);
-		}
+		this.areas = areasDao.getAreas();
+
 	}
 	
 	/*** 
@@ -138,7 +138,6 @@ public class ServerFacade implements IServerFacade{
 	private String detectEntranceToIntersection(User user) throws Exception {
 		final String TITLE = "Dangerous Intersection";
 		final String BODY = "dangerous intersection ahead";
-		ArrayList<Intersection> intersections = ServerFacade.getInstance().getIntersections();
 		
 		if(intersections == null)
 			throw new Exception("Cant detect entrance because intersection null or havn't loaded properly.");

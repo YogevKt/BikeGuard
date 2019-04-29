@@ -1,6 +1,7 @@
 package server.businessLogic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import server.entities.Area;
 import server.entities.GpsCoords;
@@ -21,7 +22,7 @@ public interface IServerFacade {
 	 * 
 	 * 
 	 * */
-	ArrayList<Intersection> getIntersections();
+	List<Intersection> getIntersections();
 	String setUser(User user) throws Exception;
 	void loadIntersectionFromDB();
 	void addArea(Area area) throws Exception;

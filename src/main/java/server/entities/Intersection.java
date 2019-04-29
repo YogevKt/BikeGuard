@@ -3,13 +3,26 @@ package server.entities;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class Intersection extends Location{
-	
+
+	@Transient
 	private Map<String, User> bikers = null;
+	@Transient
 	private Map<String, User> drivers = null;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Intersection(double latitude, double longitude) {
 		setLongitude(longitude);
@@ -27,7 +40,6 @@ public class Intersection extends Location{
 	public Map<String, User> getDrivers() {
 		return drivers;
 	}
-
 
 	public boolean addBiker(User biker) {
 		if(biker != null && !biker.getToken().isEmpty()) {

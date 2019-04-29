@@ -1,6 +1,7 @@
 package server.businessLogic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class RestController implements IRestController{
 	
 	@Override
 	@RequestMapping(value="getIntersection", method = RequestMethod.GET)
-	public ArrayList<Intersection> getIntersection() { 
+	public List<Intersection> getIntersection() {
 		
 		return ServerFacade.getInstance().getIntersections();
 	}
@@ -33,7 +34,7 @@ public class RestController implements IRestController{
 	@Override
 	@RequestMapping(value="getIntersectionsCoords", method = RequestMethod.GET)
 	public String getIntersections() { 
-		System.err.println("getIntersections");
+		System.err.println("getAreas");
 
 		return new Gson().toJson(ServerFacade.getInstance().getIntersections());
 	}
