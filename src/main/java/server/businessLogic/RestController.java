@@ -1,12 +1,13 @@
 package server.businessLogic;
 
 import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.google.gson.Gson;
 
-import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.User;
 

@@ -2,9 +2,10 @@ package server.businessLogic;
 
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import server.businessLogic.UserAlertsService.Alert;
+import server.dal.IntersectionRepo;
 import server.entities.Area;
 import server.entities.GpsCoords;
 import server.entities.Intersection;
@@ -13,11 +14,14 @@ import server.entities.User;
 
 public class ServerFacade implements IServerFacade{
 	
+	@Autowired
+	private IntersectionRepo intersectionRepo;
 	private static ServerFacade serverFacade = null;
 	private ArrayList<Area> areas = null;
 	
 	private ServerFacade() {
 		areas = new ArrayList<>();
+		
 	}
 
 	public static ServerFacade getInstance(){
@@ -97,7 +101,6 @@ public class ServerFacade implements IServerFacade{
 	@Override
 	public String setUser(User user) throws Exception {
 		if(user.getToken() != null && !user.getToken().isEmpty()) {
-			
 			//start detection of entrance to dangerous intersection
 			return detectEntranceToIntersection(user);
 		}else {
@@ -117,7 +120,12 @@ public class ServerFacade implements IServerFacade{
 	 */	
 	@Override
 	public void loadIntersectionFromDB() {
+		Iterable<Intersection> intersections = intersectionRepo.findAll();
 		
+		//TODO sort intersections by area
+		for (Intersection intersection : intersections) {
+			areas.get(0).addIntersection(intersection);
+		}
 	}
 	
 	/*** 

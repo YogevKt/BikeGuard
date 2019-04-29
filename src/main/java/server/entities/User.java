@@ -8,12 +8,14 @@ public class User implements ILocation {
 
 	private UserType type = null;
 	private String token;
-	private GpsCoords coords = null;
+	private GpsCoords currentCoords = null;
+	private GpsCoords previousCoords = null;
+	private float speed = 0;
 
 	public User(String token, UserType type, GpsCoords coords) {
 		setToken(token);
 		setType(type);
-		this.coords = new GpsCoords(coords.getLatitude(),coords.getLongitude());
+		this.currentCoords = new GpsCoords(coords.getLatitude(),coords.getLongitude());
 	}
 
 	public UserType getType() {
@@ -25,7 +27,7 @@ public class User implements ILocation {
 	}
 	
 	public GpsCoords getCoords() {
-		return coords;
+		return currentCoords;
 	}
 
 	public boolean setType(UserType type) {
@@ -57,16 +59,36 @@ public class User implements ILocation {
 
 	@Override
 	public void setLongitude(double longitude) {
-		this.coords.setLongitude(longitude);
+		this.currentCoords.setLongitude(longitude);
 	}
 
 	@Override
 	public void setLatitude(double latitude) {
-		this.coords.setLatitude(latitude);
+		this.currentCoords.setLatitude(latitude);
+	}
+	
+	public void setCoords(GpsCoords coords) {
+		this.previousCoords = this.currentCoords;
+		this.currentCoords = coords;
+	}
+	
+	
+
+	public GpsCoords getPreviousCoords() {
+		return previousCoords;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		if(speed >= 0)
+			this.speed = speed;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("User type: %s, Coords: %s", this.type, this.coords);
+		return String.format("User type: %s, Coords: %s", this.type, this.currentCoords);
 	}
 }

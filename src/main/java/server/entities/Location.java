@@ -65,6 +65,125 @@ public abstract class Location implements ILocation{
 	    return dist;
 	}
 	
+	public static CartesianCoord calculateIntersectionPoint(User driver, User biker) {
+		CartesianCoord intersectionPoint = new CartesianCoord();
+		
+		//convert gps coords to cartesian
+		CartesianCoord driverCurrentCoords = new CartesianCoord(driver.getCoords());
+		CartesianCoord driverPreviousCoords = new CartesianCoord(driver.getPreviousCoords());
+		
+		CartesianCoord bikerCurrentCoords = new CartesianCoord(biker.getCoords());
+		CartesianCoord bikerPreviousCoords = new CartesianCoord(biker.getPreviousCoords());
+		
+		//find the linear equation for driver
+		double mDriver = ( driverCurrentCoords.getY() - driverPreviousCoords.getY() ) / 
+				( driverCurrentCoords.getX() - driverPreviousCoords.getX() ); 
+		
+		
+		//find the linear equation for biker
+		double mBiker = ( bikerCurrentCoords.getY() - bikerPreviousCoords.getY() ) / 
+				( bikerCurrentCoords.getX() - bikerPreviousCoords.getX() ); 
+		
+		//find intersection point between the lines
+		double b = -mDriver*driverCurrentCoords.getX() + driverCurrentCoords.getY();
+		double d = -mBiker*bikerCurrentCoords.getX() + bikerCurrentCoords.getY();
+		
+		intersectionPoint.setX( (d-b)/(mDriver-mBiker) );
+		intersectionPoint.setY(mDriver*intersectionPoint.getX() + b);
+		
+		return intersectionPoint;
+	}
+	
+	public static class CartesianCoord{
+		private double x;
+		private double y;
+		private double z;
+		
+		private final double R = 6371; // in km
+		
+		public CartesianCoord() {	
+		}
+		
+		public CartesianCoord(double x, double y, double z) {
+			super();
+			setX(x);
+			setY(y);
+			setZ(z);
+		}
+		
+		public CartesianCoord(GpsCoords gpsCoords) {
+			super();
+			setCoordsByGPS(gpsCoords);
+		}
+
+		public double getX() {
+			return x;
+		}
+
+		public void setX(double x) {
+			this.x = x;
+		}
+
+		public double getY() {
+			return y;
+		}
+
+		public void setY(double y) {
+			this.y = y;
+		}
+		
+		public double getZ() {
+			return z;
+		}
+
+		public void setZ(double z) {
+			this.z = z;
+		}
+
+		/**
+		 * Geodetic to Cartesian Conversion formula:
+		 * x = R * cos(lat) * cos(lon)
+		 * y = R * cos(lat) * sin(lon)
+		 * z = R *sin(lat)
+		 * 
+		 * R = Earth radius in KM (6371)
+		 * 
+		 * @param gpsCoords
+		 */
+		
+		public void setCoordsByGPS(GpsCoords gpsCoords) {
+			this.x = R * Math.cos(gpsCoords.getLatitude()) * Math.cos(gpsCoords.getLongitude());
+			this.y = R * Math.cos(gpsCoords.getLatitude()) * Math.sin(gpsCoords.getLongitude());
+			this.z = R * Math.sin(gpsCoords.getLatitude());
+		}
+		
+		public void setCoordsByGPS(double latitude, double longitude) {
+			this.x = R * Math.cos(latitude) * Math.cos(longitude);
+			this.y = R * Math.cos(latitude) * Math.sin(longitude);
+			this.z = R * Math.sin(latitude);
+		}
+		
+		/**
+		 * Cartesian to Geodetic Conversion formula:
+		 * lat = asin(z / R)
+		 * lon = atan2(y, x)
+		 * 
+		 * @return
+		 */
+		public GpsCoords getGPSCoords() {
+			return new GpsCoords(Math.asin(this.z/R), Math.atan2(this.y, this.x));
+		}
+		
+		public double distance(CartesianCoord other) {
+			double y = ( this.getY() - other.getY() ) * ( this.getY() - other.getY() );
+			double x = ( (this.getX() - other.getX()) * (this.getX() - other.getX()));
+			return Math.sqrt(y + x);
+		}
+	}
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return String.format("[%f,%f]", this.latitude, this.longitude);

@@ -3,6 +3,9 @@ package server.entities;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Intersection extends Location{
 	
 	private Map<String, User> bikers = null;
@@ -28,7 +31,13 @@ public class Intersection extends Location{
 
 	public boolean addBiker(User biker) {
 		if(biker != null && !biker.getToken().isEmpty()) {
-			this.bikers.put(biker.getToken(), biker);
+			if(bikers.containsKey(biker.getToken())) {
+				User localBiker = this.bikers.get(biker.getToken());
+				localBiker.setCoords(biker.getCoords());
+				localBiker.setSpeed(biker.getSpeed());
+			}else {
+				this.bikers.put(biker.getToken(), biker);
+			}
 			return true;
 		}
 		
@@ -38,7 +47,14 @@ public class Intersection extends Location{
 	
 	public boolean addDriver(User driver) {
 		if(driver != null && !driver.getToken().isEmpty()) {
-			this.drivers.put(driver.getToken(), driver);
+			if(drivers.containsKey(driver.getToken())) {
+				User localDriver = this.drivers.get(driver.getToken());
+				localDriver.setCoords(driver.getCoords());
+				localDriver.setSpeed(driver.getSpeed());
+			}else {
+				this.drivers.put(driver.getToken(), driver);
+			}
+			
 			return true;
 		}
 		

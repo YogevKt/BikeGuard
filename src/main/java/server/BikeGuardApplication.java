@@ -9,7 +9,6 @@ import server.businessLogic.ServerServices;
 import server.entities.Area;
 import server.entities.GpsCoords;
 import server.entities.Intersection;
-import server.entities.Location;
 import server.entities.User;
 
 @SpringBootApplication
@@ -41,7 +40,7 @@ public class BikeGuardApplication {
 			
 			//add intersection nearby yogev's home
 			server.addIntersection(new Intersection(32.268066, 34.911650));//95~ from yogev's home
-			server.addIntersection(new Intersection(31.911670, 34.267475));//44~ from yogev's home
+			server.addIntersection(new Intersection(31.267475, 34.911670));//44~ from yogev's home
 		
 			
 			//add driver
