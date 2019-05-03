@@ -1,19 +1,35 @@
 package server.entities;
 
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
+@MappedSuperclass
 public abstract class Location implements ILocation{
-	
+	@Transient
 	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
+	@Transient
 	public static final int AREA_DISTANCE_RADIUS = 1000;
+	@Transient
 	public static final double HIGH_ALERT_DISTANCE = 35;
+	@Transient
 	public static final double MEDIUM_ALERT_DISTANCE = 75;
 	
 	private double longitude;
 	private double latitude;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 
 	@Override

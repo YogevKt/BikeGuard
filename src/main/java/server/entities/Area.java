@@ -3,20 +3,12 @@ package server.entities;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-
+@Entity
 public class Area extends Location{
 	private ArrayList<Intersection> intersections = null;
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public Area() {
+		
 	}
 	
 	public Area(double latitude, double longitude) {
@@ -28,6 +20,10 @@ public class Area extends Location{
 	@OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
 	public ArrayList<Intersection> getIntersections() {
 		return intersections;
+	}
+
+	public void setIntersections(ArrayList<Intersection> intersections) {
+		this.intersections = intersections;
 	}
 	
 	public boolean addIntersection(Intersection intersection) {
@@ -53,6 +49,8 @@ public class Area extends Location{
 		
 		return null;
 	}
+
+	
 	
 	
 	

@@ -2,10 +2,13 @@ package server.businessLogic;
 
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Intersection;
@@ -13,19 +16,17 @@ import server.entities.Location;
 import server.entities.Location.CartesianCoord;
 import server.entities.User;
 
-
 public class ServerServices implements Runnable{
-	
-	
+	@Autowired
+	private ServerFacade serverfacade;
 	
 	@Override
 	public void run() {
 		
 
 		// init intersections from DB
-		ServerFacade.getInstance().loadIntersectionFromDB();
-		
-		//init areas by intersection area
+		//ServerFacade.getInstance().loadIntersectionFromDB();
+
 		
 		
 		//start collision monitor thread
@@ -52,12 +53,11 @@ public class ServerServices implements Runnable{
 	 */
 	private void collisionMonitor() {
 		//Create stream contains task for each intersection
-		
-		ServerFacade.getInstance().getIntersections().parallelStream().forEach(intersection -> checkCollision(intersection));
-		
-		//each thread check if in the current intersection might be collision
-		
+		//each thread check if in the current intersection might be collision		
 		//in case of probability for collision send notification to the user
+		
+		List<Intersection> intersections = serverfacade.getIntersections();
+		intersections.parallelStream().forEach(intersection -> checkCollision(intersection));
 		
 	}
 	

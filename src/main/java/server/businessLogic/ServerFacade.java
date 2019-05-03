@@ -4,35 +4,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import server.businessLogic.UserAlertsService.Alert;
-import server.dal.AreasDao;
+import server.dal.AreaDao;
 import server.entities.Area;
 import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.Location;
 import server.entities.User;
 
+@Service
 public class ServerFacade implements IServerFacade{
 
-	private static ServerFacade serverFacade = null;
 	private List<Intersection> intersections = null;
 	private List<Area> areas = null;
-	@Autowired
-	private AreasDao areasDao;
+	private AreaDao areasDao;
 	
 	private ServerFacade() {
 		areas = new ArrayList<>();
-		
 	}
-
-	public static ServerFacade getInstance(){
-		if(serverFacade == null)
-			serverFacade = new ServerFacade();
-		return serverFacade;
-	}
-
 	
+	@Autowired
+	private ServerFacade(AreaDao areasDao) {
+		areas = new ArrayList<>();
+		this.areasDao=areasDao;
+		debug();
+	}
+	
+	public void debug() {
+		ServerFacade server = this;
+		
+		try {
+		
+			//add area
+			Area area1 = new Area(31.96828999958059,34.80140645543159);
+			server.addArea(area1);//area may
+			Area area2 = new Area(32.268066,34.911650);
+			server.addArea(area2);//area yogev
+			
+			//add intersections	nearby may's home		
+			server.addIntersection(new Intersection(31.968111,34.800483)); //76~ from may's home
+			server.addIntersection(new Intersection(31.968210,34.800753)); //46~ from may's home
+			server.addIntersection(new Intersection(31.96828999958059,34.80140645543159)); //17~ from may's home
+			
+			//add intersection nearby yogev's home
+			server.addIntersection(new Intersection(32.268066, 34.911650));//95~ from yogev's home
+			server.addIntersection(new Intersection(31.267475, 34.911670));//44~ from yogev's home
+		
+			areasDao.save(area1);
+			areasDao.save(area2);
+			
+			//add driver
+			/*server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+					User.UserType.DRIVER, new GpsCoords(31.968210,34.800753)));*/
+			
+			
+			/*server.setUser(new User("fAfBRGDJpf8:APA91bELeW-CBV1fJm8SqS8H-cDW7Gn7VX1yeAW0xyWpkDfECIcQSzCa0-2rP52D3NTDqIGhTT_TgYSapeGaEX7ks5WIfGlZO-dDvuRzfqAEjRNmfBNv3ToIj_l90eTkt0E08-ekQmL1",
+					User.UserType.BIKER, new GpsCoords(32.267659,34.911553)));*/
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
 	/***
 	 * Returns Collection with all the intersection from each area.
@@ -124,8 +161,10 @@ public class ServerFacade implements IServerFacade{
 	 */	
 	@Override
 	public void loadIntersectionFromDB() {
-		this.areas = areasDao.getAreas();
-
+		Iterable<Area> areasIterator = areasDao.findAll();
+		for (Area area : areasIterator) {
+			areas.add(area);
+		}
 	}
 	
 	/*** 
