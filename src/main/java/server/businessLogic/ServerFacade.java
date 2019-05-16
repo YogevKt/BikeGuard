@@ -29,7 +29,7 @@ public class ServerFacade implements IServerFacade{
 	private ServerFacade(AreaDao areasDao) {
 		areas = new ArrayList<>();
 		this.areasDao=areasDao;
-		debug();
+		//debug();
 	}
 	
 	public void debug() {
@@ -263,6 +263,7 @@ public class ServerFacade implements IServerFacade{
 			for (Area area : areas) {
 				if(Location.distance(area, intersection) < Location.AREA_DISTANCE_RADIUS) {
 					area.addIntersection(intersection);
+					break;
 				}
 			}
 		}else {			

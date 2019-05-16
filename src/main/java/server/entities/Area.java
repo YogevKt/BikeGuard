@@ -1,11 +1,19 @@
 package server.entities;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 @Entity
 public class Area extends Location{
-	private ArrayList<Intersection> intersections = null;
+	@JoinTable(name="area_intersection")
+	@OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL,targetEntity=Intersection.class)
+	private List<Intersection> intersections = null;
 	
 	public Area() {
 		
@@ -17,8 +25,8 @@ public class Area extends Location{
 		intersections = new ArrayList<>();
 	}
 
-	@OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
-	public ArrayList<Intersection> getIntersections() {
+	
+	public List<Intersection> getIntersections() {
 		return intersections;
 	}
 
