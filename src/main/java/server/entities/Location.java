@@ -11,11 +11,13 @@ public abstract class Location implements ILocation{
 	@Transient
 	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
 	@Transient
-	public static final int AREA_DISTANCE_RADIUS = 1000;
+	public static final int AREA_DISTANCE_RADIUS = 10000;
 	@Transient
 	public static final double HIGH_ALERT_DISTANCE = 35;
 	@Transient
 	public static final double MEDIUM_ALERT_DISTANCE = 75;
+	@Transient
+	public static final double COLLISION_TIME_DELTA = 5;
 	
 	private double longitude;
 	private double latitude;
@@ -63,8 +65,8 @@ public abstract class Location implements ILocation{
 	 */
 	public static double distance(Location coordA, Location coordB) throws Exception {
 		if(coordA != null && coordB != null) {
-			double res = distance(coordA.getLatitude(), coordA.getLongitude(), coordB.getLatitude(), coordB.getLongitude());
-			return res/1000.0;
+			return distance(coordA.getLatitude(), coordA.getLongitude(), coordB.getLatitude(), coordB.getLongitude());
+			//return res/1000.0;
 		}else {
 			throw new Exception("Coord A or B was null");
 		}
@@ -118,6 +120,7 @@ public abstract class Location implements ILocation{
 		private double x;
 		private double y;
 		private double z;
+		private GpsCoords coords;
 		
 		private final double R = 6371; // in km
 		
@@ -133,6 +136,7 @@ public abstract class Location implements ILocation{
 		
 		public CartesianCoord(GpsCoords gpsCoords) {
 			super();
+			this.coords = gpsCoords;
 			setCoordsByGPS(gpsCoords);
 		}
 
@@ -159,6 +163,7 @@ public abstract class Location implements ILocation{
 		public void setZ(double z) {
 			this.z = z;
 		}
+		
 
 		/**
 		 * Geodetic to Cartesian Conversion formula:
@@ -172,15 +177,19 @@ public abstract class Location implements ILocation{
 		 */
 		
 		public void setCoordsByGPS(GpsCoords gpsCoords) {
-			this.x = R * Math.cos(gpsCoords.getLatitude()) * Math.cos(gpsCoords.getLongitude());
-			this.y = R * Math.cos(gpsCoords.getLatitude()) * Math.sin(gpsCoords.getLongitude());
-			this.z = R * Math.sin(gpsCoords.getLatitude());
+			double dLat = Math.toRadians(gpsCoords.getLatitude());
+		    double dLng = Math.toRadians(gpsCoords.getLongitude());
+			this.x = R * Math.cos(dLat) * Math.cos(dLng);
+			this.y = R * Math.cos(dLat) * Math.sin(dLng);
+			this.z = R * Math.sin(dLat);
 		}
 		
 		public void setCoordsByGPS(double latitude, double longitude) {
-			this.x = R * Math.cos(latitude) * Math.cos(longitude);
-			this.y = R * Math.cos(latitude) * Math.sin(longitude);
-			this.z = R * Math.sin(latitude);
+			double dLat = Math.toRadians(latitude);
+		    double dLng = Math.toRadians(longitude);
+			this.x = R * Math.cos(dLat) * Math.cos(dLng);
+			this.y = R * Math.cos(dLat) * Math.sin(dLng);
+			this.z = R * Math.sin(dLat);
 		}
 		
 		/**
@@ -191,7 +200,8 @@ public abstract class Location implements ILocation{
 		 * @return
 		 */
 		public GpsCoords getGPSCoords() {
-			return new GpsCoords(Math.asin(this.z/R), Math.atan2(this.y, this.x));
+			//return new GpsCoords(Math.asin(this.z/R), Math.atan2(this.y, this.x));
+			return coords;
 		}
 		
 		public double distance(CartesianCoord other) {
@@ -199,9 +209,12 @@ public abstract class Location implements ILocation{
 			double x = ( (this.getX() - other.getX()) * (this.getX() - other.getX()));
 			return Math.sqrt(y + x);
 		}
+		
+		@Override
+		public String toString() {
+			return String.format("[%f,%f,%f]", x,y,z);
+		}
 	}
-	
-	
 	
 	
 	@Override

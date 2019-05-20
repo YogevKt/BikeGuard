@@ -24,7 +24,6 @@ public interface IServerFacade {
 	 * */
 	List<Intersection> getIntersections();
 	String setUser(User user) throws Exception;
-	void loadIntersectionFromDB();
 	void addArea(Area area) throws Exception;
 	void addArea(ArrayList<Area> areas) throws Exception;
 	void addIntersection(Intersection intersection) throws Exception;

@@ -69,7 +69,7 @@ public class User implements ILocation {
 	
 	public void setCoords(GpsCoords coords) {
 		this.previousCoords = this.currentCoords;
-		this.currentCoords = coords;
+		this.currentCoords = new GpsCoords(coords.getLatitude(), coords.getLongitude());
 	}
 	
 	
