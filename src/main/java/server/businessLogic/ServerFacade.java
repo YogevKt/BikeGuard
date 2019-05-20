@@ -3,6 +3,8 @@ package server.businessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,31 +31,31 @@ public class ServerFacade implements IServerFacade{
 	private ServerFacade(AreaDao areasDao) {
 		areas = new ArrayList<>();
 		this.areasDao=areasDao;
-		//debug();
+		debug();
 	}
 	
 	public void debug() {
-		ServerFacade server = this;
+		//ServerFacade server = this;
 		
 		try {
 		
 			//add area
-			Area area1 = new Area(31.96828999958059,34.80140645543159);
-			server.addArea(area1);//area may
-			Area area2 = new Area(32.268066,34.911650);
-			server.addArea(area2);//area yogev
-			
-			//add intersections	nearby may's home		
-			server.addIntersection(new Intersection(31.968111,34.800483)); //76~ from may's home
-			server.addIntersection(new Intersection(31.968210,34.800753)); //46~ from may's home
-			server.addIntersection(new Intersection(31.96828999958059,34.80140645543159)); //17~ from may's home
-			
-			//add intersection nearby yogev's home
-			server.addIntersection(new Intersection(32.268066, 34.911650));//95~ from yogev's home
-			server.addIntersection(new Intersection(31.267475, 34.911670));//44~ from yogev's home
-		
-			areasDao.save(area1);
-			areasDao.save(area2);
+//			Area area1 = new Area(31.96828999958059,34.80140645543159);
+//			server.addArea(area1);//area may
+//			Area area2 = new Area(32.268066,34.911650);
+//			server.addArea(area2);//area yogev
+//			
+//			//add intersections	nearby may's home		
+//			server.addIntersection(new Intersection(31.968111,34.800483)); //76~ from may's home
+//			server.addIntersection(new Intersection(31.968210,34.800753)); //46~ from may's home
+//			server.addIntersection(new Intersection(31.96828999958059,34.80140645543159)); //17~ from may's home
+//			
+//			//add intersection nearby yogev's home
+//			server.addIntersection(new Intersection(32.268066, 34.911650));//95~ from yogev's home
+//			server.addIntersection(new Intersection(31.267475, 34.911670));//44~ from yogev's home
+//		
+//			areasDao.save(area1);
+//			areasDao.save(area2);
 			
 			//add driver
 			/*server.setUser(new User("clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
@@ -160,6 +162,7 @@ public class ServerFacade implements IServerFacade{
 	 * @exception
 	 */	
 	@Override
+	@PostConstruct
 	public void loadIntersectionFromDB() {
 		Iterable<Area> areasIterator = areasDao.findAll();
 		for (Area area : areasIterator) {

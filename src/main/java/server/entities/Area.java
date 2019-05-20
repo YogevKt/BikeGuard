@@ -16,7 +16,7 @@ public class Area extends Location{
 	private List<Intersection> intersections = null;
 	
 	public Area() {
-		
+		intersections = new ArrayList<>();
 	}
 	
 	public Area(double latitude, double longitude) {

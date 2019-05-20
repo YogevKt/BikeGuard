@@ -13,7 +13,10 @@ public class Intersection extends Location{
 	@Transient
 	private Map<String, User> drivers = null;
 	
-	
+	public Intersection() {
+		bikers = new HashMap<>();
+		drivers = new HashMap<>();
+	}
 
 	public Intersection(double latitude, double longitude) {
 		setLongitude(longitude);

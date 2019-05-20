@@ -22,13 +22,7 @@ public class ServerServices implements Runnable{
 	
 	@Override
 	public void run() {
-		
-
-		// init intersections from DB
-		//ServerFacade.getInstance().loadIntersectionFromDB();
-
-		
-		
+	
 		//start collision monitor thread
 		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 		exec.scheduleWithFixedDelay(new Runnable() {
