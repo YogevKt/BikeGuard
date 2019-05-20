@@ -1,16 +1,12 @@
 package server.businessLogic;
 
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 import org.springframework.stereotype.Service;
+
 import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Intersection;
 import server.entities.Location;

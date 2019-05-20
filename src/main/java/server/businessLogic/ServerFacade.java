@@ -125,7 +125,7 @@ public class ServerFacade implements IServerFacade{
 		System.err.print("Load data from DB");
 		loadIntersectionFromDB();
 		System.err.println("Start server services monitor");
-		new Thread(new ServerServices(this)).start();
+		//new Thread(new ServerServices(this)).start();
 	}
 		
 	
