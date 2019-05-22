@@ -19,9 +19,10 @@ public class Area extends Location{
 		intersections = new ArrayList<>();
 	}
 	
-	public Area(double latitude, double longitude) {
+	public Area(double latitude, double longitude,double altitude) {
 		setLongitude(longitude);
 		setLatitude(latitude);
+		setAltitude(altitude);
 		intersections = new ArrayList<>();
 	}
 

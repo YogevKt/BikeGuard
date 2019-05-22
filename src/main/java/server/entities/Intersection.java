@@ -18,9 +18,10 @@ public class Intersection extends Location{
 		drivers = new HashMap<>();
 	}
 
-	public Intersection(double latitude, double longitude) {
+	public Intersection(double latitude, double longitude,double altitude) {
 		setLongitude(longitude);
 		setLatitude(latitude);
+		setAltitude(altitude);
 		
 		bikers = new HashMap<>();
 		drivers = new HashMap<>();

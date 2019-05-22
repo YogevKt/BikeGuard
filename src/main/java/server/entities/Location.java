@@ -6,6 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import com.google.gson.JsonObject;
+
+import server.businessLogic.RestClient;
+
 @MappedSuperclass
 public abstract class Location implements ILocation{
 	@Transient
@@ -21,6 +25,7 @@ public abstract class Location implements ILocation{
 	
 	private double longitude;
 	private double latitude;
+	private double altitude;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -54,7 +59,16 @@ public abstract class Location implements ILocation{
 		this.latitude = latitude;	
 	}
 	
+	@Override
+	public double getAltitude() {
+		return altitude;
+	}
 	
+	@Override
+	public void setAltitude(double altitude) {
+		this.altitude = altitude;
+	}
+
 	/***
 	 * Calculate distance between Location objects.
 	 * 
@@ -115,6 +129,25 @@ public abstract class Location implements ILocation{
 		
 		return intersectionPoint;
 	}
+	
+	public static CartesianCoord geodetic_to_cartesian(double lat,double lon,double alt) {
+		final String URI = "/geodetic_to_cartesian";
+		RestClient restClient = new RestClient();
+		JsonObject json = new JsonObject();
+		
+		json.addProperty("Latitude", lat);
+		json.addProperty("Longitude", lon);
+		json.addProperty("Altitude", alt);
+		
+		String respones = restClient.post2(URI, json.toString());
+		System.out.println(respones);
+		return null;
+	}
+	
+	public static GpsCoords cartesian_to_geodetic(double x, double y, double z) {
+		return null;
+	}
+	
 	
 	public static class CartesianCoord{
 		private double x;
@@ -200,7 +233,6 @@ public abstract class Location implements ILocation{
 		 * @return
 		 */
 		public GpsCoords getGPSCoords() {
-			//return new GpsCoords(Math.asin(this.z/R), Math.atan2(this.y, this.x));
 			return coords;
 		}
 		
@@ -219,6 +251,6 @@ public abstract class Location implements ILocation{
 	
 	@Override
 	public String toString() {
-		return String.format("[%f,%f]", this.latitude, this.longitude);
+		return String.format("[%f,%f,%f]", this.latitude, this.longitude, this.altitude);
 	}
 }

@@ -68,7 +68,7 @@ public class ServerFacade implements IServerFacade{
 		
 		for (Area area : areas) {
 			for(Intersection intersection : area.getIntersections()) {
-				allIntersectionsCoords.add(new GpsCoords(intersection.getLatitude(), intersection.getLongitude()));
+				allIntersectionsCoords.add(new GpsCoords(intersection.getLatitude(), intersection.getLongitude(),intersection.getAltitude()));
 			}
 		}
 
