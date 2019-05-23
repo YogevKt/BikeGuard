@@ -6,14 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import com.google.gson.JsonObject;
-
-import server.businessLogic.RestClient;
+import server.businessLogic.CartesianCoord;
+import server.businessLogic.RestService;
 
 @MappedSuperclass
 public abstract class Location implements ILocation{
 	@Transient
-	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 100;
+	public static final int INTERSECTION_NOTIFICATION_DISTANCE = 300;
 	@Transient
 	public static final int AREA_DISTANCE_RADIUS = 10000;
 	@Transient
@@ -100,16 +99,18 @@ public abstract class Location implements ILocation{
 
 	    return dist;
 	}
-	
+
+
 	public static CartesianCoord calculateIntersectionPoint(User driver, User biker) {
+		RestService restService = new RestService();
 		CartesianCoord intersectionPoint = new CartesianCoord();
-		
+
 		//convert gps coords to cartesian
-		CartesianCoord driverCurrentCoords = new CartesianCoord(driver.getCoords());
-		CartesianCoord driverPreviousCoords = new CartesianCoord(driver.getPreviousCoords());
+		CartesianCoord driverCurrentCoords = restService.convertGpsCoordsToCartesianCoord(driver.getCoords());
+		CartesianCoord driverPreviousCoords = restService.convertGpsCoordsToCartesianCoord(driver.getPreviousCoords());
 		
-		CartesianCoord bikerCurrentCoords = new CartesianCoord(biker.getCoords());
-		CartesianCoord bikerPreviousCoords = new CartesianCoord(biker.getPreviousCoords());
+		CartesianCoord bikerCurrentCoords = restService.convertGpsCoordsToCartesianCoord(biker.getCoords());
+		CartesianCoord bikerPreviousCoords = restService.convertGpsCoordsToCartesianCoord(biker.getPreviousCoords());
 		
 		//find the linear equation for driver
 		double mDriver = ( driverCurrentCoords.getY() - driverPreviousCoords.getY() ) / 
@@ -126,128 +127,11 @@ public abstract class Location implements ILocation{
 		
 		intersectionPoint.setX( (d-b)/(mDriver-mBiker) );
 		intersectionPoint.setY(mDriver*intersectionPoint.getX() + b);
-		
+
+		intersectionPoint.setZ((driverCurrentCoords.getZ()+bikerCurrentCoords.getZ())/2.0);
+		intersectionPoint.setCoords(restService.convertCartesianToGpsCoords(intersectionPoint));
 		return intersectionPoint;
 	}
-	
-	public static CartesianCoord geodetic_to_cartesian(double lat,double lon,double alt) {
-		final String URI = "/geodetic_to_cartesian";
-		RestClient restClient = new RestClient();
-		JsonObject json = new JsonObject();
-		
-		json.addProperty("Latitude", lat);
-		json.addProperty("Longitude", lon);
-		json.addProperty("Altitude", alt);
-		
-		String respones = restClient.post2(URI, json.toString());
-		System.out.println(respones);
-		return null;
-	}
-	
-	public static GpsCoords cartesian_to_geodetic(double x, double y, double z) {
-		return null;
-	}
-	
-	
-	public static class CartesianCoord{
-		private double x;
-		private double y;
-		private double z;
-		private GpsCoords coords;
-		
-		private final double R = 6371; // in km
-		
-		public CartesianCoord() {	
-		}
-		
-		public CartesianCoord(double x, double y, double z) {
-			super();
-			setX(x);
-			setY(y);
-			setZ(z);
-		}
-		
-		public CartesianCoord(GpsCoords gpsCoords) {
-			super();
-			this.coords = gpsCoords;
-			setCoordsByGPS(gpsCoords);
-		}
-
-		public double getX() {
-			return x;
-		}
-
-		public void setX(double x) {
-			this.x = x;
-		}
-
-		public double getY() {
-			return y;
-		}
-
-		public void setY(double y) {
-			this.y = y;
-		}
-		
-		public double getZ() {
-			return z;
-		}
-
-		public void setZ(double z) {
-			this.z = z;
-		}
-		
-
-		/**
-		 * Geodetic to Cartesian Conversion formula:
-		 * x = R * cos(lat) * cos(lon)
-		 * y = R * cos(lat) * sin(lon)
-		 * z = R *sin(lat)
-		 * 
-		 * R = Earth radius in KM (6371)
-		 * 
-		 * @param gpsCoords
-		 */
-		
-		public void setCoordsByGPS(GpsCoords gpsCoords) {
-			double dLat = Math.toRadians(gpsCoords.getLatitude());
-		    double dLng = Math.toRadians(gpsCoords.getLongitude());
-			this.x = R * Math.cos(dLat) * Math.cos(dLng);
-			this.y = R * Math.cos(dLat) * Math.sin(dLng);
-			this.z = R * Math.sin(dLat);
-		}
-		
-		public void setCoordsByGPS(double latitude, double longitude) {
-			double dLat = Math.toRadians(latitude);
-		    double dLng = Math.toRadians(longitude);
-			this.x = R * Math.cos(dLat) * Math.cos(dLng);
-			this.y = R * Math.cos(dLat) * Math.sin(dLng);
-			this.z = R * Math.sin(dLat);
-		}
-		
-		/**
-		 * Cartesian to Geodetic Conversion formula:
-		 * lat = asin(z / R)
-		 * lon = atan2(y, x)
-		 * 
-		 * @return
-		 */
-		public GpsCoords getGPSCoords() {
-			return coords;
-		}
-		
-		public double distance(CartesianCoord other) {
-			double y = ( this.getY() - other.getY() ) * ( this.getY() - other.getY() );
-			double x = ( (this.getX() - other.getX()) * (this.getX() - other.getX()));
-			return Math.sqrt(y + x);
-		}
-		
-		@Override
-		public String toString() {
-			return String.format("[%f,%f,%f]", x,y,z);
-		}
-	}
-	
 	
 	@Override
 	public String toString() {

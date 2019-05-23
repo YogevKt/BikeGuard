@@ -4,13 +4,15 @@ package server.businessLogic;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Service;
 
 import server.businessLogic.UserAlertsService.Alert;
 import server.entities.Intersection;
 import server.entities.Location;
-import server.entities.Location.CartesianCoord;
 import server.entities.User;
 
 @Service
@@ -25,14 +27,14 @@ public class ServerServices implements Runnable{
 	public void run() {
 	
 		//start collision monitor thread
-//		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-//		exec.scheduleWithFixedDelay(new Runnable() {
-//		  @Override
-//		  public void run() {
-//			  collisionMonitor();
-//		  }
-//		}, 0, 1, TimeUnit.SECONDS);
-		debugCollision();
+		ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+		exec.scheduleWithFixedDelay(new Runnable() {
+		  @Override
+		  public void run() {
+			  collisionMonitor();
+		  }
+		}, 0, 1, TimeUnit.SECONDS);
+		//debugCollision();
 	}
 	
 	private void debugCollision() {
@@ -123,13 +125,17 @@ public class ServerServices implements Runnable{
 	}
 	
 	private boolean isHeadingToIntersectionPoint(User user, CartesianCoord intersectionPoint) {
-		CartesianCoord userCurrentCoords = new CartesianCoord(user.getCoords());
-		CartesianCoord userPreviousCoords = new CartesianCoord(user.getPreviousCoords());
-		
-		if(intersectionPoint.distance(userCurrentCoords) <= intersectionPoint.distance(userPreviousCoords))
-			return true;
-		else
-			return false;
+
+		try {
+			if(Location.distance(user.getCoords(), intersectionPoint.getGPSCoords())
+					<= Location.distance(user.getPreviousCoords(), intersectionPoint.getGPSCoords()))
+				return true;
+
+		} catch (Exception e) {
+			System.err.println("Could not calc user direction.");
+		}
+
+		return false;
 	}
 	
 	private double timeOfArrivalToIntersectionPoint(User user, CartesianCoord intersectionPoint) {

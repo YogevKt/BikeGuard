@@ -12,7 +12,6 @@ import server.entities.GpsCoords;
 import server.entities.Intersection;
 import server.entities.Location;
 import server.entities.User;
-import server.entities.Location.CartesianCoord;
 
 @RestController
 @RequestMapping("/debug")
@@ -106,20 +105,36 @@ public class DebugRestController {
 	}
 
 	@RequestMapping(value = "testConversion", method = RequestMethod.GET)
-	public String testConversion() {
-		
+	public CartesianCoord testConversion() {
+		/*debug();
+		try {
+			debugUpdateUsers();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 		StringBuilder sb = new StringBuilder();
-//		User user1 = new User(
-//				"clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
-//				User.UserType.DRIVER, new GpsCoords(32.113604, 34.817115,22));
-//		CartesianCoord userCart = new CartesianCoord(user1.getCoords());
-//
-//		sb.append("User coords: " + user1.getCoords() + "\n");
-//		sb.append("Cart: " + userCart + "\n");
-//		sb.append("cart to coords: " + userCart.getGPSCoords() + "\n");
-		
-		Location.geodetic_to_cartesian(32.113604, 34.817115,22);
-		return sb.toString();
+		User user1 = new User(
+				"clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+				User.UserType.DRIVER, new GpsCoords(32.113604, 34.817115,22));
+		user1.setSpeed(20);
+		user1.setCoords(new GpsCoords(32.11334, 34.817512,22));
+
+		User user2 = new User(
+				"fAfBRGDJpf8:APA91bELeW-CBV1fJm8SqS8H-cDW7Gn7VX1yeAW0xyWpkDfECIcQSzCa0-2rP52D3NTDqIGhTT_TgYSapeGaEX7ks5WIfGlZO-dDvuRzfqAEjRNmfBNv3ToIj_l90eTkt0E08-ekQmL1",
+				User.UserType.BIKER, new GpsCoords(32.113504, 34.818458,22));
+		user2.setCoords(new GpsCoords(32.113309, 34.818043,22));
+		user2.setSpeed(20);
+
+		try {
+			serverFasade.setUser(user1);
+			serverFasade.setUser(user2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//CartesianCoord x = Location.calculateIntersectionPoint(user1, user2);
+		//System.err.println(x);
+
+		return null;
 	}
 
 }
