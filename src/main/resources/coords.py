@@ -21,16 +21,16 @@ def cartesian_to_geodetic():
     print ("Latitude: %f" % lat)
     print ("Longitude: %f" % lon)
     print ("Height in metres: %f" % alt)
-    return jsonify({"Latitude":lat,"Longitude":lon,"Altitude":alt})
+    return jsonify({"latitude":lat,"longitude":lon,"altitude":alt})
 
 
 # Definition of the function to convert Geodetic coordinates to Cartesian
 @app.route('/geodetic_to_cartesian', methods = ['POST'])
 def geodetic_to_cartesian():
     data = json.loads(request.data)
-    lat = data['Latitude']
-    lon = data['Longitude']
-    alt = data['Altitude']
+    lat = data['latitude']
+    lon = data['longitude']
+    alt = data['altitude']
     ecef = pyproj.Proj(proj='geocent', ellps='WGS84', datum='WGS84')
     lla = pyproj.Proj(proj='latlong', ellps='WGS84', datum='WGS84')
 
