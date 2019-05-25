@@ -34,33 +34,21 @@ public class ServerServices implements Runnable{
 			  collisionMonitor();
 		  }
 		}, 0, 1, TimeUnit.SECONDS);
-		//debugCollision();
 	}
 	
-	private void debugCollision() {
-		List<Intersection> intersections = serverfacade.getIntersections();
-		for (Intersection intersection : intersections) {
-			if(intersection != null) {
-				Map<String, User> drivers = intersection.getDrivers();
-				if(drivers != null) {
-					intersection.getDrivers().values().forEach(driver->{
-						debug2(driver,intersection.getBikers(),intersection);
-					});
-				}
-			}
-		}
-	}
 
-	private void debug2(User driver, Map<String, User> bikers, Intersection intersection) {
-		bikers.values().stream().forEach(biker -> alertUsersOnCollisionUser(driver,biker,intersection));		
-	}
 
 	/*** 
-	 * Running monitor that sample every X seconds if user might coiled inside intersection area.
+	 * Running monitor that sample every 1 seconds if user might coiled inside intersection area.
 	 * 
 	 * Steps:
-	 * 
-	 * 
+	 * 1.run over each intersection
+	 * 2.for each intersection check collision for each driver
+	 * 3.find users driving vector
+	 * 4.find users collision point
+	 * 5.check if users ahead to collision point
+	 * 6.calculate the difference at arrive time of the users to the collision point
+	 * 7. alert in case the difference at arrive time less then the final set at settings.
 	 * 
 	 * @param None
 	 * 
@@ -70,7 +58,6 @@ public class ServerServices implements Runnable{
 		//Create stream contains task for each intersection
 		//each thread check if in the current intersection might be collision		
 		//in case of probability for collision send notification to the user
-		System.err.println("collision monitor");
 		List<Intersection> intersections = serverfacade.getIntersections();
 		intersections.parallelStream().forEach(intersection -> checkCollision(intersection));
 		
@@ -90,7 +77,6 @@ public class ServerServices implements Runnable{
 	}
 	
 	private void alertUsersOnCollisionUser(User driver, User biker,Intersection intersection) {
-		System.err.println("alertUsersOnCollisionUser");
 		//convert gps coords to cartesian and find intersection point between the users
 		if(driver.getPreviousCoords() == null || biker.getPreviousCoords()==null)
 			return;

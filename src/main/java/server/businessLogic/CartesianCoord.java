@@ -11,8 +11,6 @@ public class CartesianCoord{
     @Transient
     private GpsCoords coords;
 
-    private final double R = 6371; // in km
-
     public CartesianCoord() {
     }
 
