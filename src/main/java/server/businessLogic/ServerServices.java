@@ -102,7 +102,8 @@ public class ServerServices implements Runnable{
 		//alert user by measurements
 		if(Math.abs(tBiker-tDriver) <=  Location.COLLISION_TIME_DELTA) {
 			try {
-				sendCollisionAlert(driver,biker,Location.distance(driver.getCoords(), biker.getCoords()));
+				sendCollisionAlert(driver,Location.distance(driver.getCoords(), intersectionPoint.getGPSCoords()));
+				sendCollisionAlert(biker,Location.distance(biker.getCoords(), intersectionPoint.getGPSCoords()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -132,80 +133,40 @@ public class ServerServices implements Runnable{
 		}
 	}
 	
-	private void sendCollisionAlert(User driver, User biker, double distance) {
+	private void sendCollisionAlert(User user, double distance) {
 		boolean isAlerted;
-		if(distance <= Location.MEDIUM_ALERT_DISTANCE && distance > Location.HIGH_ALERT_DISTANCE) {
-			//medium alert
-			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.MEDIUM);
+		String alertOn;
+		
+		if(user.getType() == User.UserType.BIKER){
+			alertOn="driver";
+		}else{
+			alertOn="biker";
+		}
+		
+		if(distance <= Location.LOW_ALERT_DISTANCE && distance > Location.MEDIUM_ALERT_DISTANCE){
+			//low alert
+			isAlerted = UserAlertsService.getInstance().isUserAlerted(user.getToken(), Alert.LOW);
 			
 			if(!isAlerted)	{
-				FireBaseServiceHandler.sendPushNotification(biker,"Medium Alert","In "+(int)distance+" there's a driver");
+				FireBaseServiceHandler.sendPushNotification(user,"Low Alert","In "+(int)distance+" there's a "+alertOn);
+			}
+		}else if(distance <= Location.MEDIUM_ALERT_DISTANCE && distance > Location.HIGH_ALERT_DISTANCE) {
+			//medium alert
+			isAlerted = UserAlertsService.getInstance().isUserAlerted(user.getToken(), Alert.MEDIUM);
+			
+			if(!isAlerted)	{
+				FireBaseServiceHandler.sendPushNotification(user,"Medium Alert","In "+(int)distance+" there's a "+alertOn);
 			}
 			
 		}else if(distance <= Location.HIGH_ALERT_DISTANCE) {
 			//high alert
-			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.HIGH);
+			isAlerted = UserAlertsService.getInstance().isUserAlerted(user.getToken(), Alert.HIGH);
 			
 			if(!isAlerted) {
-				FireBaseServiceHandler.sendPushNotification(biker,"High Alert","In "+(int)distance+"m there's a driver");
+				FireBaseServiceHandler.sendPushNotification(user,"High Alert","In "+(int)distance+"m there's a "+alertOn);
 			}
 		}
 	}
 	
-	
-	
-	
-	
-	//////////////////////////////////////////////////////////////////////
- 	
-	
- 	@Deprecated
-	private void alertCollisionOLD(User driver , Map<String, User> bikers) {
-		double minDistance = Location.MEDIUM_ALERT_DISTANCE;
-		User biker;
-		User closestBiker = null;
-
-		try {
-			Iterator<User> bikersIterator = bikers.values().iterator();
-			
-			while(bikersIterator.hasNext()) {
-				biker = bikersIterator.next();
-				double distance = Location.distance(driver.getCoords(), biker.getCoords());
-				if(distance <= minDistance) {
-					minDistance = distance;
-					closestBiker = biker;
-				}
-			}
-			if (closestBiker != null) {
-				sendCollisionAlertOLD(driver, closestBiker, minDistance);
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Deprecated
- 	private void sendCollisionAlertOLD(User driver, User biker, double distance) {
-		boolean isAlerted;
-		if(distance <= Location.MEDIUM_ALERT_DISTANCE && distance > Location.HIGH_ALERT_DISTANCE) {
-			//medium alert
-			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.MEDIUM);
-			
-			if(!isAlerted)	{
-				FireBaseServiceHandler.sendPushNotification(biker,"Medium Alert","In "+(int)distance+" there's a driver");
-			}
-			
-		}else if(distance <= Location.HIGH_ALERT_DISTANCE) {
-			//high alert
-			isAlerted = UserAlertsService.getInstance().isUserAlerted(biker.getToken(), Alert.HIGH);
-			
-			if(!isAlerted) {
-				FireBaseServiceHandler.sendPushNotification(biker,"High Alert","In "+(int)distance+"m there's a driver");
-			}
-		}
-	}
-	
-
 
 }

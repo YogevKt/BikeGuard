@@ -6,7 +6,7 @@ import java.util.Map;
 public class UserAlertsService {
  
 	public static enum Alert {
-		INTERSECTION_ENTRANCE ,MEDIUM, HIGH
+		INTERSECTION_ENTRANCE ,MEDIUM, HIGH,LOW
 	}
 	
 	private Map<String, UserAlerts> mapUsersAlerts;

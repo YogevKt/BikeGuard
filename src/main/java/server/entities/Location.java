@@ -20,6 +20,8 @@ public abstract class Location implements ILocation{
 	@Transient
 	public static final double MEDIUM_ALERT_DISTANCE = 75;
 	@Transient
+	public static final double LOW_ALERT_DISTANCE = 100;
+	@Transient
 	public static final double COLLISION_TIME_DELTA = 5;
 	
 	private double longitude;
