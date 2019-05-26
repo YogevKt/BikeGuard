@@ -71,7 +71,7 @@ public class DebugRestController {
 
 	}
 
-	@RequestMapping(value = "temp", method = RequestMethod.POST)
+	@RequestMapping(value = "temp", method = RequestMethod.GET)
 	public void temp() {
 		try {
 			Area area1 = new Area(32.267527, 34.911479, 43); // Yogev
@@ -88,7 +88,7 @@ public class DebugRestController {
 	}
 	
 	
-	@RequestMapping(value = "fakeDrivers", method = RequestMethod.POST)
+	@RequestMapping(value = "fakeDrivers", method = RequestMethod.GET)
 	public void voidFakeUsers() {
 		//may
 		User maysArea = new User(
@@ -105,6 +105,15 @@ public class DebugRestController {
 				User.UserType.DRIVER, new GpsCoords(32.267537, 34.911343, 43));
 		yogevsArea.setSpeed(30);
 		yogevsArea.setCoords(new GpsCoords(32.267559, 34.911412, 43));
+		
+		try {
+			serverFasade.setUser(maysArea);
+			serverFasade.setUser(yogevsArea);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 
