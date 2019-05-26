@@ -15,7 +15,7 @@ public class User implements ILocation {
 	public User(String token, UserType type, GpsCoords coords) {
 		setToken(token);
 		setType(type);
-		this.currentCoords = new GpsCoords(coords.getLatitude(),coords.getLongitude(),coords.getAltitude());
+		setCoords(coords);
 	}
 
 	public UserType getType() {
@@ -78,8 +78,12 @@ public class User implements ILocation {
 	}
 	
 	public void setCoords(GpsCoords coords) {
-		this.previousCoords = this.currentCoords;
-		this.currentCoords = new GpsCoords(coords.getLatitude(), coords.getLongitude(),coords.getAltitude());
+		if(this.currentCoords == null) {
+			this.currentCoords = coords;
+		}else {
+			this.previousCoords = this.currentCoords;
+			this.currentCoords = new GpsCoords(coords.getLatitude(), coords.getLongitude(),coords.getAltitude());
+		}
 	}
 	
 	

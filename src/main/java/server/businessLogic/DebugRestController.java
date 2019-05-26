@@ -114,7 +114,7 @@ public class DebugRestController {
 		}*/
 		StringBuilder sb = new StringBuilder();
 		User user1 = new User(
-				"clX5g_VUGCU:APA91bGhM-A_a8C_nGHCi1-KkleO40Zt9k3X9v1fx58zmLI8oS3e1_1bQrToPqqq1dRniPHIekjzCS9MYUHIp_-k8pRWzUzwwnsMhpOqrlk45mtkcjyew0XaTm0wtdjcFWSBZmJbOITr",
+				"dWv1T0x_mB4:APA91bGTP78G8e7MnQTT8aIdfy2nLxAoXR2YS8_VO3Dgr_fx2Jpkl4PxaQ_3WS5nKtwPix8gFAXlwUkdS61SF8Z9Ugn-FaMhvCUMA2KAPZYQEQJv91I0_O3NdlTufo3guQ7Cgo2IBREa",
 				User.UserType.DRIVER, new GpsCoords(32.113604, 34.817115,22));
 		user1.setSpeed(20);
 		user1.setCoords(new GpsCoords(32.11334, 34.817512,22));
